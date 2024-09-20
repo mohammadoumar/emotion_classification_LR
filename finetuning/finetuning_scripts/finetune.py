@@ -38,7 +38,7 @@ DATASET_DIR = os.path.join(FT_DIR, "datasets")
 ERC_DIR = FT_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/Phi-3-mini-4k-instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit"
 OUTPUT_DIR = os.path.join(FT_DIR, "finetuned_models", f"""comics_{BASE_MODEL.split("/")[1]}""")
 
 # print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
@@ -98,7 +98,7 @@ args = dict(
   overwrite_output_dir=True,             # overrides existing output contents
 
   dataset="comics",                      # dataset name
-  template="phi",                     # use llama3 prompt template
+  template="qwen",                     # use llama3 prompt template
 
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
@@ -107,7 +107,7 @@ args = dict(
   lr_scheduler_type="cosine",            # use cosine learning rate scheduler
   logging_steps=10,                      # log every 10 steps
   warmup_ratio=0.1,                      # use warmup scheduler
-  save_steps=5000,                       # save checkpoint every 1000 steps
+  #save_steps=5000,                       # save checkpoint every 1000 steps
   learning_rate=5e-5,                    # the learning rate
   max_samples=5000,                       # use 500 examples in each dataset
   max_grad_norm=1.0,                     # clip gradient norm to 1.0
@@ -132,7 +132,7 @@ p.wait()
 args = dict(
   model_name_or_path=BASE_MODEL, # use bnb-4bit-quantized Llama-3-8B-Instruct model
   adapter_name_or_path=OUTPUT_DIR,            # load the saved LoRA adapters
-  template="phi",                     # same to the one in training
+  template="qwen",                     # same to the one in training
   finetuning_type="lora",                  # same to the one in training
   quantization_bit=4,                    # load 4-bit quantized model
 )

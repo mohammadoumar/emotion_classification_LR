@@ -32,6 +32,11 @@ We use LLMs for three classification tasks:
 2) **In-Context Learning (ICL):** In-Context Learning is a Deep Learing technique where a model is *guided* for inference with the help of a few solved demonstrations added in the model's input prompt.
 3) **Fine-tuning (FT):** Fine-tuning involves further training of a pre-trained model on a downstream dataset. This helps general-purpose model training to be complemented with task specific supervised training.
 
+# Prompts:
+
+1) **Zero-shot Classification (ZSC):** 
+
+
 # Requirements
 
 We use the following versions of the packages:
@@ -45,6 +50,6 @@ transformers==4.44.2
 bitsandbytes==0.43.1
 ```
 
-# Platform
+# Platform and Compute
 
 All experiments have been performed on the High Performance Cluster at La Rochelle Université.
