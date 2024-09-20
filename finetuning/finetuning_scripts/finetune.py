@@ -38,7 +38,8 @@ DATASET_DIR = os.path.join(FT_DIR, "datasets")
 ERC_DIR = FT_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit"
+BASE_MODEL = "deepseek-ai/DeepSeek-V2-Lite-Chat"
+LOGGING_DIR = os.path.join(FT_DIR, "training_logs")
 OUTPUT_DIR = os.path.join(FT_DIR, "finetuned_models", f"""comics_{BASE_MODEL.split("/")[1]}""")
 
 # print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
@@ -98,7 +99,7 @@ args = dict(
   overwrite_output_dir=True,             # overrides existing output contents
 
   dataset="comics",                      # dataset name
-  template="qwen",                     # use llama3 prompt template
+  template="deepseek",                     # use llama3 prompt template
 
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
@@ -114,8 +115,8 @@ args = dict(
   quantization_bit=4,                    # use 4-bit QLoRA
   loraplus_lr_ratio=16.0,                # use LoRA+ algorithm with lambda=16.0
   fp16=True,                             # use float16 mixed precision training
-
-  report_to="none"                       # discards wandb
+  logging_dir=LOGGING_DIR,
+  report_to="tensorboard"                       # discards wandb
 
 )
 
@@ -132,7 +133,7 @@ p.wait()
 args = dict(
   model_name_or_path=BASE_MODEL, # use bnb-4bit-quantized Llama-3-8B-Instruct model
   adapter_name_or_path=OUTPUT_DIR,            # load the saved LoRA adapters
-  template="qwen",                     # same to the one in training
+  template="deepseek",                     # same to the one in training
   finetuning_type="lora",                  # same to the one in training
   quantization_bit=4,                    # load 4-bit quantized model
 )

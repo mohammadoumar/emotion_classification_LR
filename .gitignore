@@ -51,8 +51,9 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/jupyternotebooks,macos
 
 LLaMA-Factory/
-tensorboard_runs/
+**/training_logs/
 **/adapter_model.safetensors
 **/tokenizer.json
 **/optimizer.pt
 **/*.pyc
+.vscode
