@@ -1,4 +1,4 @@
-# Sentiment Analysis and Emotion Classification for Comics using Large Language Models (LLMS)
+# Sentiment Analysis and Emotion Classification for Comics using Large Language Models (LLMs)
 
 Fine-tuning LLMs using LLaMA-Factory for Sentiment Analysis in Comics. We reformulate emotion classification as a *text generation task*. We experiment with the following models:
 
@@ -25,7 +25,7 @@ We finetune LLMs for the Comics dataset on three context levels:
 3) **Title level classification:** Every raw utterance in the comics titles is classified into one or more of the emotion classes, with additional context on the page complete book level provided as input to the LLM.
 
 
-# Modalities:
+# Modalities
 
 We use LLMs for three classification tasks:
 
@@ -33,14 +33,9 @@ We use LLMs for three classification tasks:
 2) **In-Context Learning (ICL):** In-Context Learning is a Deep Learning technique where a model is *guided* for inference with the help of a few solved demonstrations added in the model's input prompt.
 3) **Fine-tuning (FT):** Fine-tuning involves further training of a pre-trained model on a downstream dataset. This helps general-purpose model training to be complemented with task specific supervised training.
 
-# Prompts:
+# Prompts
 
-For all three modalities, we experiment with different prompting techniques, which are listed here:
-
-1) **Zero-shot Classification (ZSC):** 
-2) **In-Context Learning (ICL):**
-3) **Fine-tuning (FT):**
-
+For all three modalities, we experiment with different prompting techniques.
 
 # Requirements
 
@@ -57,6 +52,6 @@ bitsandbytes==0.43.1
 
 # Platform and Compute
 
-For fine-tuning LLMs, we use the [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) framework . For model checkpoints, we use [**Unsloth**](https://huggingface.co/unsloth).
+For fine-tuning LLMs, we use the [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) framework. For model checkpoints, we use [**Unsloth**](https://huggingface.co/unsloth).
 
 All experiments have been performed on the High Performance Cluster at **La Rochelle Université**.
