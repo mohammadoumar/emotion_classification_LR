@@ -29,10 +29,16 @@ model_id = args.model
 
 CURRENT_DIR = Path.cwd()
 ZS_DIR = CURRENT_DIR.parent
-DATASET_DIR = os.path.join(ZS_DIR, "datasets")
-OUTPUT_DIR = os.path.join(ZS_DIR, "results", f"""zs_{model_id.split("/")[1]}""")
+DATASET_DIR = Path(ZS_DIR) / "datasets"
+OUTPUT_DIR = Path(ZS_DIR) / "results" / f"zs_{model_id.split('/')[1]}"
 
-### 2. Instantiate Model and Tokenizer ###
+# DATASET_DIR = os.path.join(ZS_DIR, "datasets")
+# OUTPUT_DIR = os.path.abspath(os.path.join(ZS_DIR, "results", f"""zs_{model_id.split("/")[1]}"""))
+
+print(CURRENT_DIR, ZS_DIR, DATASET_DIR, OUTPUT_DIR)
+
+
+## 2. Instantiate Model and Tokenizer ###
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
 inference_tokenizer.pad_token = inference_tokenizer.eos_token
@@ -108,7 +114,10 @@ for i in tqdm(range(len(prepared_sys_task_msg_l))):
 grounds = df.emotions_list.tolist()
 preds = [list(ast.literal_eval(output).values()) for output in outputs_l]
 
-with open(f"""{OUTPUT_DIR}/results.pickle""", 'wb+') as fh:
+results_file = Path(OUTPUT_DIR) / "results.pickle"
+results_file.parent.mkdir(parents=True, exist_ok=True)
+
+with results_file.open('wb') as fh:
     results_d = {"ground_truths": grounds,
                  "predictions": preds    
         
@@ -119,6 +128,8 @@ grounds_matrix, preds_matrix = post_process_zs(grounds, preds)
 
 print(classification_report(grounds_matrix, preds_matrix, target_names=all_labels, digits=3))
 
-with open(f"""{OUTPUT_DIR}/classification_report.pickle""", 'wb') as fh:
+classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
+
+with classification_file.open('wb') as fh:
     
     pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=all_labels, output_dict=True), fh)
