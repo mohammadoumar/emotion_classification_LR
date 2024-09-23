@@ -35,8 +35,6 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"zs_{model_id.split('/')[1]}"
 # DATASET_DIR = os.path.join(ZS_DIR, "datasets")
 # OUTPUT_DIR = os.path.abspath(os.path.join(ZS_DIR, "results", f"""zs_{model_id.split("/")[1]}"""))
 
-print(CURRENT_DIR, ZS_DIR, DATASET_DIR, OUTPUT_DIR)
-
 
 ## 2. Instantiate Model and Tokenizer ###
 
