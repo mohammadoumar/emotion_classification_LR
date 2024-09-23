@@ -37,6 +37,17 @@ We use LLMs for three classification tasks:
 
 For all three modalities, we experiment with different prompting techniques.
 
+1) **Zero-shot Classification (ZSC):**
+
+```
+[{'role': 'system',
+  'content': '### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format {"utterance_emotion": <predicted emotion classes for the utterance (str)>}\n\n'},
+{'role': 'user',
+  'content': '# Utterance:\n {utterance} \n\n# Result:\n'}]
+```
+
+
+
 # Requirements
 
 We use the following versions of the packages:
