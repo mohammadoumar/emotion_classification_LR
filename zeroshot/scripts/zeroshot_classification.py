@@ -15,6 +15,7 @@ from sklearn.metrics import classification_report
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 
 sys.path.append('../')
+#dist.init_process_group(backend='nccl', rank=0, world_size=1)
 
 from utils.pre_process import *
 from utils.post_process import *
@@ -45,11 +46,11 @@ terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tok
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.bfloat16,
-    #attn_implementation="flash_attention_2",
+    # attn_implementation="flash_attention_2",
     device_map="auto",
 )
 
-print(generation_model.device)
+#generation_model = nn.DataParallel(generation_model)
 
 
 ### 3. Read Data from CSV file ###
@@ -62,14 +63,33 @@ df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 
 ### 4. Prepare Messages and Prompts ###
 
+# * Prompt Prepration for LLaMA and Qwen 
+# sys_msg_l = []
+# task_msg_l = []
+# prepared_sys_task_msg_l = []
+
+# for row in df.iterrows():
+
+#     sys_msg = {"role":"system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format {\"utterance_emotion\": <predicted emotion classes for the utterance (str)>}\n\n"}
+#     task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+
+#     sys_msg_l.append(sys_msg)
+#     task_msg_l.append(task_msg)
+
+# for i in range(len(sys_msg_l)):
+
+#     prepared_sys_task_msg_l.append([sys_msg_l[i], task_msg_l[i]])
+
+# * Prompt Prepration for Gemma
+
 sys_msg_l = []
 task_msg_l = []
 prepared_sys_task_msg_l = []
 
 for row in df.iterrows():
 
-    sys_msg = {"role":"system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format {\"utterance_emotion\": <predicted emotion classes for the utterance (str)>}\n\n"}
-    task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+    sys_msg = {"role":"user", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format: {utterance_emotion: <predicted emotion classes for the utterance (str)>}\n\n"}
+    task_msg = {"role":"assistant", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
 
     sys_msg_l.append(sys_msg)
     task_msg_l.append(task_msg)
@@ -90,6 +110,7 @@ for i in tqdm(range(len(prepared_sys_task_msg_l))):
     messages,
     add_generation_prompt=True,
     tokenize=True,
+    #tokenize=False,
     padding=True,
     truncation=True,
     return_tensors="pt"
@@ -97,7 +118,7 @@ for i in tqdm(range(len(prepared_sys_task_msg_l))):
 
     outputs = generation_model.generate(
     input_ids = input_ids,
-    max_new_tokens=1024,
+    max_new_tokens=64,
     pad_token_id=inference_tokenizer.eos_token_id,
     eos_token_id=terminators,
     do_sample=True,
@@ -110,18 +131,19 @@ for i in tqdm(range(len(prepared_sys_task_msg_l))):
 ### 6. Save Results, Post Process and Save Classficiation Reports ###
 
 grounds = df.emotions_list.tolist()
-preds = [list(ast.literal_eval(output).values()) for output in outputs_l]
+#preds = [list(ast.literal_eval(output).values()) for output in outputs_l]
 
 results_file = Path(OUTPUT_DIR) / "results.pickle"
 results_file.parent.mkdir(parents=True, exist_ok=True)
 
 with results_file.open('wb') as fh:
     results_d = {"ground_truths": grounds,
-                 "predictions": preds    
+                 "predictions": outputs_l    
         
     }
     pickle.dump(results_d, fh)
 
+preds = [list(ast.literal_eval(output).values()) for output in outputs_l]
 grounds_matrix, preds_matrix = post_process_zs(grounds, preds)
 
 print(classification_report(grounds_matrix, preds_matrix, target_names=all_labels, digits=3))

@@ -37,7 +37,7 @@ We use LLMs for three classification tasks:
 
 For all three modalities, we experiment with different prompting techniques.
 
-1) **Zero-shot Classification (ZSC):** The prompt used for **LLaMA**, **Qwen** and **Phi** models is given below:
+1) **Zero-shot Classification (ZSC):** The prompt used for **LLaMA** and **Qwen** models is given below:
 
 ```
 [{'role': 'system',
