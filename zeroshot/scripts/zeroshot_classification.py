@@ -40,16 +40,16 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"zs_{model_id.split('/')[1]}"
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
 inference_tokenizer.pad_token = inference_tokenizer.eos_token
-terminators = [
-    inference_tokenizer.eos_token_id,
-    inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")
-]
+terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.bfloat16,
+    #attn_implementation="flash_attention_2",
     device_map="auto",
 )
+
+print(generation_model.device)
 
 
 ### 3. Read Data from CSV file ###
