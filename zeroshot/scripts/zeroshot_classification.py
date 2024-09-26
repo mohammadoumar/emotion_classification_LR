@@ -48,10 +48,11 @@ inference_tokenizer.pad_token = inference_tokenizer.eos_token
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.bfloat16,
-    #attn_implementation="flash_attention_2",
+    attn_implementation="flash_attention_2",
     device_map="auto",
 )
 
+#print(f"After model instantiation: {torch.cuda.memory_allocated(generation_model.device) / (1024**2)}")
 #device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 #generation_model.to(device)
 # print(generation_model.device)
@@ -89,19 +90,23 @@ df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 
 sys_msg_l = []
 task_msg_l = []
+#top_msg_l = []
 prepared_sys_task_msg_l = []
 
 for row in df.iterrows():
 
-    sys_msg = {"role":"system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": \"<predicted emotion classes for the utterance (str)>}\"\n\n"}
-    task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+    #top_msg = {"role": "system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": \"<predicted emotion classes for the utterance (str)>}\"\n\n"}
+    sys_msg = {"role":"system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": <predicted emotion classes for the utterance (str)>}" + f"\n\n# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+    #task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
 
     sys_msg_l.append(sys_msg)
-    task_msg_l.append(task_msg)
+    #task_msg_l.append(task_msg)
+    #top_msg_l.append(top_msg)
 
 for i in range(len(sys_msg_l)):
 
-    prepared_sys_task_msg_l.append([sys_msg_l[i], task_msg_l[i]])
+    #prepared_sys_task_msg_l.append([sys_msg_l[i], task_msg_l[i]])
+    prepared_sys_task_msg_l.append([sys_msg_l[i]])
 
 ### 5. Run Classification / Generate labels ###
 
@@ -131,10 +136,13 @@ print(input_ids.shape)
 BATCH_SIZE = 256
 n = len(prepared_sys_task_msg_l)
 
-for i in tqdm(range(0, n, BATCH_SIZE)):
+for batch_num, i in enumerate(tqdm(range(0, n, BATCH_SIZE)), start=1):
     #batch = input_ids[:BATCH_SIZE, :].to(generation_model.device) 
     batch = input_ids[i:i + BATCH_SIZE, :].to(generation_model.device)
-    print(batch.shape)
+    print(f"Processing Batch: {batch_num}")
+    # print(batch.shape)
+    #print(batch.nelement() * batch.element_size())
+    # print(f"After batch {batch_num} to CUDA: {torch.cuda.memory_allocated(generation_model.device) / (1024**2)}")
     outputs = generation_model.generate(
     input_ids = batch,
     max_new_tokens=64,
@@ -215,10 +223,24 @@ with results_file.open('wb') as fh:
     }
     pickle.dump(results_d, fh)
 
+
 preds = []
 for output in outputs_l:
     for prediction in output:
-        preds.append([list(ast.literal_eval(prediction).values())])
+        try:
+            # Use json.loads to safely parse the JSON-like string
+            parsed_prediction = json.loads(prediction)
+            # Append the values of the parsed prediction to preds
+            preds.append(list(parsed_prediction.values()))
+        except json.JSONDecodeError as e:
+            print(f"Error decoding prediction: {e}")
+            # Optionally, append a placeholder or handle error
+            #preds.append([])  # or handle the error differently
+
+# preds = []
+# for output in outputs_l:
+#     for prediction in output:
+#         preds.append([list(ast.literal_eval(prediction).values())])
 
 #preds = [list(ast.literal_eval(output).values()) for output in outputs_l]
 
