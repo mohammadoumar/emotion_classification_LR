@@ -57,3 +57,4 @@ LLaMA-Factory/
 **/optimizer.pt
 **/*.pyc
 .vscode
+dir_structure.txt

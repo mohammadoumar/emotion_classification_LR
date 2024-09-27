@@ -1,43 +1,79 @@
-# Sentiment Analysis and Emotion Classification for Comics using Large Language Models (LLMs)
+# 📣 Sentiment Analysis and Emotion Classification for Comics using LLMs 📣
 
 Fine-tuning LLMs using LLaMA-Factory for Sentiment Analysis in Comics. We reformulate emotion classification as a *text generation task*. We experiment with the following models:
 
-- **LLaMA-3-8B**, from Meta AI.
-- **LLaMA-3.1-8B**, from Meta AI.
-- **Gemma-2-9B**, from Google.
-- **Mistral-7B**, from Mistral.
-- **Qwen-2-7B**, from Qwen.
-- **Phi-3-mini**, from Microsoft.
-- **Qwen-2.5-1.5B**, from Qwen.
-- **Falcon-7b**, from Technology Innovation Institute.
+- **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
+- **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
+- **Gemma-2-9B-it** -- [**Google**](google/gemma-2-9b-it)
+- **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
+- **Qwen-2-7B-Instruct** -- [**Qwen**](Qwen/Qwen2-7B-Instruct)
+- **Qwen-2.5-1.5B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-1.5B-Instruct)
+- **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
+- **Falcon-7b-instruct** -- [**Technology Innovation Institute**](tiiuae/falcon-7b-instruct)
 
+<br>
 
-# Data
+# 📂 Repository Structure
 
-We experiment with a dataset which consists of 32 (and increasing) annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)* or *Joy (JO)*, and *Neutral* which fit neither of the afore-mentioned classes. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utternaces.
+This repository is organized as follows:
 
-# Context Configurations
+1) **data_files**: this directory contains the raw data files containing the annotated data from comics titles. Every utterance is annotated with *emotion* and *speaker_id*.
+2) **finetuning**: this directory contains the implementation of LLM finetuning for comics. 
+3) **zeroshot**: this directory contains the implementation of zero-shot classification for comics using LLMs.
+
+```
+.
+├── data_files
+├── finetuning
+│   ├── data_preparation
+│   ├── datasets
+│   ├── finetuned_models
+│   ├── finetuning_model_args
+│   ├── finetuning_scripts
+│   ├── notebooks
+│   ├── training_logs
+│   └── utils
+└── zeroshot
+    ├── datasets
+    ├── notebooks
+    ├── results
+    ├── scripts
+    └── utils
+```
+
+<br>
+
+# 🧮 Data
+
+We experiment with a dataset which consists of 32 (and increasing) annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)* or *Joy (JO)*, and *Neutral* which fit neither of the afore-mentioned classes. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utternaces. 
+
+<br>
+
+# 📚 Context Configurations
 
 We finetune LLMs for the Comics dataset on three context levels: 
 
-1) **Utternace level classification:** Every raw utterance in the comics titles is classified into one or more of the emotion classes, with no additiona context given.
+1) **Utterance level classification:** Every raw utterance in the comics titles is classified into one or more of the emotion classes, with no additiona context given.
 2) **Page level classification:** Every raw utterance in the comics titles is classified into one or more of the emotion classes, with additional context on the page level provided as input to the LLM.
 3) **Title level classification:** Every raw utterance in the comics titles is classified into one or more of the emotion classes, with additional context on the page complete book level provided as input to the LLM.
 
+<br>
 
-# Modalities
+# 🎛️ Modalities
 
 We use LLMs for three classification tasks:
 
-1) **Zero-shot Classification (ZSC):** Zero-shot classification is a Deep Learning technique where the pre-trained model is use *off the shelf* (i.e. witout any further training) for inference on completely unseen data samples.
+1) **Zero-Shot Classification (ZSC):** Zero-shot classification is a Deep Learning technique where the pre-trained model is use *off the shelf* (i.e. witout any further training) for inference on completely unseen data samples.
 2) **In-Context Learning (ICL):** In-Context Learning is a Deep Learning technique where a model is *guided* for inference with the help of a few solved demonstrations added in the model's input prompt.
-3) **Fine-tuning (FT):** Fine-tuning involves further training of a pre-trained model on a downstream dataset. This helps general-purpose model training to be complemented with task specific supervised training.
+3) **Fine-Tuning (FT):** Fine-tuning involves further training of a pre-trained model on a downstream dataset. This helps general-purpose model training to be complemented with task specific supervised training.
 
-# Prompts
+<br>
+
+# ⌨️ Prompts
 
 For all three modalities, we experiment with different prompting techniques.
 
-1) **Zero-shot Classification (ZSC):** The prompt used for **LLaMA** and **Qwen** models is given below:
+1) **Zero-Shot Classification (ZSC):** The prompt used for **LLaMA** and **Qwen** models is given below:
 
 ```
 [{'role': 'system',
@@ -46,9 +82,22 @@ For all three modalities, we experiment with different prompting techniques.
   'content': '# Utterance:\n {utterance} \n\n# Result:\n'}]
 ```
 
+2) **Fine-Tuning (FT)**: For fine-tuning, we used the template default for the respective model. In general, the prompt is in the {"instruction", "input", "output"} format given below:
+
+```
+[{"instruction": 
+  "### You are an expert in Emotion Analysis. You are given an utternace from a comic book enclosed by <UT></UT> tags. Your task is to classify each utterance as one or more the following emotion classes: "Anger" (AN), "Disgust" (DI), "Fear" (FE), "Sadness" (SA), "Surprise" (SU) or "Joy" (JO). You must return a list of emotion classes in following JSON format: {"list_emotion_classes": ["emotion_class (str)", "emotion_class (str)" ... "emotion_class (str)"]} where each element "emotion_classes (str)" is replaced by one ore more of the following abbreviated emotion class labels: "AN", "DI", "FE", "SA", "SU" or "JO". \n", 
+"input": 
+  "### Here is the utterance from a comic book: <UT>DID YOU HAVE TO ELECTROCUTE HER SO HARD?</UT>", 
+"output": 
+  "{"list_emotion_classes": ["FE", "SU"]}"}]
+
+```
 
 
-# Requirements
+<br>
+
+# 📦 Requirements
 
 We use the following versions of the packages:
 
@@ -61,8 +110,17 @@ transformers==4.44.2
 bitsandbytes==0.43.1
 ```
 
-# Platform and Compute
+For fine-tuning, you need to install LLaMA-Factory. Run the following command to install LLaMA-Factory and all the necessary dependencies and updates:
 
-For fine-tuning LLMs, we use the [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory) framework. For model checkpoints, we use [**Unsloth**](https://huggingface.co/unsloth).
+```
+bash setup.sh
+```
+<br>
 
-All experiments have been performed on the High Performance Cluster at **La Rochelle Université**.
+# 💻 Platform and Compute
+
+- For fine-tuning LLMs, we use [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory). 
+- For model checkpoints, we use [**Unsloth**](https://unsloth.ai/).
+- We also use [**Hugging Face**](https://huggingface.co/).
+
+All experiments have been performed on the High Performance Cluster at [**La Rochelle Université**](https://www.univ-larochelle.fr/).
