@@ -1,6 +1,8 @@
-# 📣 Sentiment Analysis and Emotion Classification for Comics using LLMs 📣
+# 📣 Introduction 📣
 
-Fine-tuning LLMs using LLaMA-Factory for Sentiment Analysis in Comics. We reformulate emotion classification as a *text generation task*. We experiment with the following models:
+**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as zero-shot classification (ZSC), in-context learning (ICL), retrieval augmented generation (RAG) and fine-tuning (FT). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
+
+We experiment with the following models:
 
 - **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
 - **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
@@ -94,7 +96,6 @@ For all three modalities, we experiment with different prompting techniques.
 
 ```
 
-
 <br>
 
 # 📦 Requirements
@@ -115,12 +116,13 @@ For fine-tuning, you need to install LLaMA-Factory. Run the following command to
 ```
 bash setup.sh
 ```
+
 <br>
 
 # 💻 Platform and Compute
 
-- For fine-tuning LLMs, we use [**LLaMA-Factory**](https://github.com/hiyouga/LLaMA-Factory). 
-- For model checkpoints, we use [**Unsloth**](https://unsloth.ai/).
-- We also use [**Hugging Face**](https://huggingface.co/).
+- For fine-tuning LLMs, we use [**LLaMA-Factory.**](https://github.com/hiyouga/LLaMA-Factory)
+- For model checkpoints, we use [**Unsloth.**](https://unsloth.ai/)
+- We also use [**Hugging Face.**](https://huggingface.co/)
 
-All experiments have been performed on the High Performance Cluster at [**La Rochelle Université**](https://www.univ-larochelle.fr/).
+All experiments have been performed on the High Performance Cluster at [**La Rochelle Université.**](https://www.univ-larochelle.fr/)
