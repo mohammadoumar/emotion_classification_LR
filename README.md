@@ -1,6 +1,6 @@
 # 📣 Introduction 📣
 
-**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as zero-shot classification (ZSC), in-context learning (ICL), retrieval augmented generation (RAG) and fine-tuning (FT). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
+**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as *zero-shot classification* (ZSC), *in-context learning* (ICL), *fine-tuning* (FT) and *retrieval augmented generation* (RAG). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
 
 <br>
 
@@ -10,6 +10,7 @@ This repository is organized as follows:
 
 1) **data_files**: this directory contains the raw data files containing the annotated data from comics titles. Every utterance is annotated with *emotion* and *speaker_id*.
 2) **finetuning**: this directory contains the implementation of LLM finetuning for comics. 
+3) **incontext_learning**: this directory contains the implementation of in-context learning with LLMs.
 3) **zeroshot**: this directory contains the implementation of zero-shot classification for comics using LLMs.
 
 ```
@@ -24,12 +25,19 @@ This repository is organized as follows:
 │   ├── notebooks
 │   ├── training_logs
 │   └── utils
+├── incontext_learning
+│   ├── datasets
+│   ├── notebooks
+│   ├── results
+│   ├── scripts
+│   └── utils
 └── zeroshot
     ├── datasets
     ├── notebooks
     ├── results
     ├── scripts
     └── utils
+
 ```
 
 <br>
@@ -89,7 +97,7 @@ For all three modalities, we experiment with different prompting techniques.
   'content': '# Utterance:\n {utterance} \n\n# Result:\n'}]
 ```
 
-2) **Fine-Tuning (FT)**: For fine-tuning, we used the template default for the respective model. In general, the prompt is in the {"instruction", "input", "output"} format given below:
+2) **Fine-Tuning (FT):** For fine-tuning, we used the template default for the respective model. In general, the prompt is in the {"instruction", "input", "output"} format given below:
 
 ```
 [{"instruction": 
@@ -98,6 +106,37 @@ For all three modalities, we experiment with different prompting techniques.
   "### Here is the utterance from a comic book: <UT>DID YOU HAVE TO ELECTROCUTE HER SO HARD?</UT>", 
 "output": 
   "{"list_emotion_classes": ["FE", "SU"]}"}]
+```
+
+3) **In-Context Learning (ICL):** For ICL, an instance of the prompt with 3 examples (k = 3) is given below:
+
+```
+### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You are given one utterance to classify and 3 example utterances to help you. You must absolutely not generate any text or explanation other than the following JSON format: {"utterance_emotion": "<predicted emotion classes for the utterance (str)>}"
+
+### Examples:
+
+## Example 1
+Utterance 1=QUIET… OH NO…
+
+# Result:
+{"utterance_emotions": "['fear', 'surprise']"}
+
+## Example 2
+Utterance 2=HEY!
+
+# Result:
+{"utterance_emotions": "['surprise']"}
+
+## Example 3
+Utterance 3=BUT FLORIAN… I…
+
+# Result:
+{"utterance_emotions": "['fear']"}
+
+# Utterance:
+HOW'S IT GOING?
+
+# Result:
 ```
 
 <br>
