@@ -2,17 +2,6 @@
 
 **Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as zero-shot classification (ZSC), in-context learning (ICL), retrieval augmented generation (RAG) and fine-tuning (FT). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
 
-We experiment with the following models:
-
-- **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
-- **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
-- **Gemma-2-9B-it** -- [**Google**](google/gemma-2-9b-it)
-- **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
-- **Qwen-2-7B-Instruct** -- [**Qwen**](Qwen/Qwen2-7B-Instruct)
-- **Qwen-2.5-1.5B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-1.5B-Instruct)
-- **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
-- **Falcon-7b-instruct** -- [**Technology Innovation Institute**](tiiuae/falcon-7b-instruct)
-
 <br>
 
 # 📂 Repository Structure
@@ -45,6 +34,21 @@ This repository is organized as follows:
 
 <br>
 
+# ⛓️ Models
+
+We experiment with the following models:
+
+- **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
+- **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
+- **Gemma-2-9B-it** -- [**Google**](google/gemma-2-9b-it)
+- **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
+- **Qwen-2-7B-Instruct** -- [**Qwen**](Qwen/Qwen2-7B-Instruct)
+- **Qwen-2.5-1.5B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-1.5B-Instruct)
+- **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
+- **Falcon-7b-instruct** -- [**Technology Innovation Institute**](tiiuae/falcon-7b-instruct)
+
+<br>
+
 # 🧮 Data
 
 We experiment with a dataset which consists of 32 (and increasing) annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)* or *Joy (JO)*, and *Neutral* which fit neither of the afore-mentioned classes. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utternaces. 
@@ -65,9 +69,10 @@ We finetune LLMs for the Comics dataset on three context levels:
 
 We use LLMs for three classification tasks:
 
-1) **Zero-Shot Classification (ZSC):** Zero-shot classification is a Deep Learning technique where the pre-trained model is use *off the shelf* (i.e. witout any further training) for inference on completely unseen data samples.
-2) **In-Context Learning (ICL):** In-Context Learning is a Deep Learning technique where a model is *guided* for inference with the help of a few solved demonstrations added in the model's input prompt.
+1) **Zero-Shot Classification (ZSC):** Zero-shot classification is a Deep Learning technique where the pre-trained model is used *off the shelf* (i.e. witout any further training) for inference on completely unseen data samples.
+2) **In-Context Learning (ICL):** In-Context Learning is a Deep Learning technique where a model is *guided* for accurate inference with the help of a few solved demonstrations added in the model's input prompt.
 3) **Fine-Tuning (FT):** Fine-tuning involves further training of a pre-trained model on a downstream dataset. This helps general-purpose model training to be complemented with task specific supervised training.
+4) **Retrieval Augmented Generation (RAG):** combines information retrieval with text generation models by allowing them to retrieve relevant external information before generating a response or an answer.
 
 <br>
 
@@ -93,7 +98,6 @@ For all three modalities, we experiment with different prompting techniques.
   "### Here is the utterance from a comic book: <UT>DID YOU HAVE TO ELECTROCUTE HER SO HARD?</UT>", 
 "output": 
   "{"list_emotion_classes": ["FE", "SU"]}"}]
-
 ```
 
 <br>
