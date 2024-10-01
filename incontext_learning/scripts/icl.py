@@ -61,7 +61,7 @@ df = pd.read_csv(DATASET_DIR / "comics_data_processed.csv")
 df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 df['emotions_list'] = df.apply(lambda row: extract_emotions(row), axis=1)
 
-print("\n\n********** computing embeddings using BERT **********\n\n")
+print("\n\n********** Computing embeddings using BERT **********\n\n")
 utterance_embed_d = get_utterance_embeddings(df)
 df['utterance_embedding'] = df.utterance.apply(lambda x: utterance_embed_d[x])
 
@@ -73,7 +73,7 @@ test_df = df[df.split == "TEST"].reset_index(drop=True)
 sys_msg_l = []
 task_msg_l = []
 
-print("\n\n********** computing K-neighbours and preparing prompts **********\n\n")
+print("\n\n********** Computing K-neighbours and preparing prompts **********\n\n")
 for row in tqdm(test_df.iterrows(), total=len(test_df)):
     
     #row[0] is index, row[1] is the data
