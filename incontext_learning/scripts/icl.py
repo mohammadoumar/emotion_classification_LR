@@ -35,11 +35,11 @@ model_id, k = args.model, args.k
 
 # *** Instantiate model and tokenizer *** #
 
-model_id = "unsloth/llama-3-8b-Instruct-bnb-4bit"
+print("\n\n********* Instantiating model and tokenizer **********\n\n")
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
 inference_tokenizer.pad_token = inference_tokenizer.eos_token
-terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
@@ -61,7 +61,7 @@ df = pd.read_csv(DATASET_DIR / "comics_data_processed.csv")
 df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 df['emotions_list'] = df.apply(lambda row: extract_emotions(row), axis=1)
 
-print("********** computing embeddings using BERT **********")
+print("\n\n********** computing embeddings using BERT **********\n\n")
 utterance_embed_d = get_utterance_embeddings(df)
 df['utterance_embedding'] = df.utterance.apply(lambda x: utterance_embed_d[x])
 
@@ -73,7 +73,7 @@ test_df = df[df.split == "TEST"].reset_index(drop=True)
 sys_msg_l = []
 task_msg_l = []
 
-print("********** computing K-neighbours and preparing prompts **********")
+print("\n\n********** computing K-neighbours and preparing prompts **********\n\n")
 for row in tqdm(test_df.iterrows(), total=len(test_df)):
     
     #row[0] is index, row[1] is the data
@@ -113,7 +113,7 @@ generated_outputs = []
 
 for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_batches, attention_mask_batches)), total=len(input_ids_batches)):
     
-    print(f"Processing batch {i + 1}")
+    print(f"\n\n ***** Processing batch {i + 1} *****\n\n")
     
     inputs = {
         'input_ids': input_ids_batch.to(generation_model.device), # type: ignore
@@ -124,7 +124,7 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     **inputs,
     max_new_tokens=64,
     pad_token_id=inference_tokenizer.eos_token_id,
-    eos_token_id=terminators,
+    #eos_token_id=terminators,
     do_sample=True,
     temperature=0.1,
     top_p=0.9,
