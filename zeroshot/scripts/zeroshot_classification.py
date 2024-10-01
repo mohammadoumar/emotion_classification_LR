@@ -19,7 +19,7 @@ sys.path.append('../')
 #dist.init_process_group(backend='nccl', rank=0, world_size=1)
 
 from utils.pre_process import *
-from utils.post_process import *
+from utils.post_processing import *
 
 ### 1. Read argument, set paths ###
 
