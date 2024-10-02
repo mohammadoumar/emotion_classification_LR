@@ -84,7 +84,7 @@ for i in range(len(sys_msg_l)):
 
 inputs = inference_tokenizer.apply_chat_template(
             prepared_sys_task_msg_l,
-            # pad_token = tokenizer.eos_token,
+            #pad_token = inference_tokenizer.eos_token,
             padding=True,
             truncation=True,
             add_generation_prompt=True,
@@ -114,7 +114,7 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     **inputs,
     max_new_tokens=64,
     pad_token_id=inference_tokenizer.eos_token_id,
-    #eos_token_id=terminators,
+    # eos_token_id=terminators,
     do_sample=True,
     temperature=0.1,
     top_p=0.9,
