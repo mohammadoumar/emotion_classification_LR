@@ -30,9 +30,10 @@ model_id, k = args.model, args.k
 
 print("\n\n********* Instantiating model and tokenizer **********\n\n")
 
-inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
-inference_tokenizer.pad_token = inference_tokenizer.eos_token
-terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+#inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
+inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
+#inference_tokenizer.pad_token = inference_tokenizer.eos_token
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
@@ -68,9 +69,9 @@ task_msg_l = []
 print("\n\n********** Computing K-neighbours and preparing prompts **********\n\n")
 for row in tqdm(test_df.iterrows(), total=len(test_df)):
     
-    sys_msg = {"role": "system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You are given one utterance to classify and 3 example utterances to help you. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": \"<predicted emotion classes for the utterance (str)>}\"\n\n" + "### Examples:\n\n" + prepare_similar_example_prompts(row[1].utterance, k, train_df=train_df, test_df=test_df)}
+    sys_msg = {"role": "user", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You are given one utterance to classify and 3 example utterances to help you. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": \"<predicted emotion classes for the utterance (str)>}\"\n\n" + "### Examples:\n\n" + prepare_similar_example_prompts(row[1].utterance, k, train_df=train_df, test_df=test_df)}
     #sys_msg = {"role":"system", "content": "### Task description: You are an expert biomedical assistant that takes 1) an abstract text, 2) the list of all arguments from this abstract text, and must classify all arguments into one of two classes: Claim or Premise. " + proportion_desc + " You must absolutely not generate any text or explanation other than the following JSON format {\"Argument 1\": <predicted class for Argument 1 (str)>, ..., \"Argument n\": <predicted class for Argument n (str)>}\n\n### Class definitions:" + " Claim = " + claim_fulldesc + " Premise = " + premise_fulldesc + "\n\n### Examples:\n\n" + prepare_similar_example_prompts(title_l[i], experiment_df, k=3, seed=seed)}  # Sample by similar title
-    task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+    task_msg = {"role": "assistant", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
     
     sys_msg_l.append(sys_msg)
     task_msg_l.append(task_msg)
@@ -94,7 +95,7 @@ inputs = inference_tokenizer.apply_chat_template(
 
 # *** Batch and run inferences *** #
 
-BATCH_SIZE = 32
+BATCH_SIZE = 1
 
 input_ids_batches = batch_tensor(inputs['input_ids'], BATCH_SIZE) # type: ignore
 attention_mask_batches = batch_tensor(inputs['attention_mask'], BATCH_SIZE) # type: ignore
@@ -113,8 +114,8 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     outputs = generation_model.generate(
     **inputs,
     max_new_tokens=64,
-    pad_token_id=inference_tokenizer.eos_token_id,
-    eos_token_id=terminators,
+    #pad_token_id=inference_tokenizer.eos_token_id,
+    #eos_token_id=terminators,
     do_sample=True,
     temperature=0.1,
     top_p=0.9,

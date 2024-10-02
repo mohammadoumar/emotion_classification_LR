@@ -3,18 +3,19 @@ import random
 from operator import itemgetter
 import torch.nn.functional as F
 
-# device = 'cuda' if torch.cuda.is_available() else 'cpu'
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 def get_k_neighbours(k, utterance, train_df, test_df):
     
     
     test_utterance_embedding = test_df[test_df.utterance == utterance]["utterance_embedding"].values[0]
-    #test_utterance_embedding = torch.tensor(test_utterance_embedding).to(device)
+    #test_utterance_embedding = torch.tensor(test_utterance_embedding)#.to(device)
 
     utterance_embed_d = {}
     for e in train_df.iterrows():
         if e[1].utterance not in utterance_embed_d:
-            utterance_embed_d[e[1].utterance] = e[1].utterance_embedding
+            #utterance_embed_d[e[1].utterance] = e[1].utterance_embedding
+            utterance_embed_d[e[1].utterance] = e[1].utterance_embedding#.to(device)
 
     # train_titles = set(df[df.split == 'TRAIN'].title.unique())
     train_utterances = set(train_df.utterance)
