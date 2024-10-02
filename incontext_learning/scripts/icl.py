@@ -1,19 +1,13 @@
 import sys
-import ast
-import json
 import torch
-import random
 import pickle
 import argparse
-import numpy as np
 import pandas as pd
-import torch.nn.functional as F
 
 sys.path.append('../')
 
 from pathlib import Path
 from tqdm.notebook import tqdm
-from operator import itemgetter
 from sklearn.metrics import classification_report
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 
@@ -22,7 +16,6 @@ from utils.pre_process import *
 from utils.post_process import *
 from utils.get_embeddings import *
 from utils.prepare_kneighbours_prompt import *
-
 
 # *** Read Args *** #
 
@@ -49,7 +42,6 @@ generation_model = AutoModelForCausalLM.from_pretrained(
 
 # *** Set paths *** #
 
-#DATASET_DIR = Path(Path.cwd().as_posix()) / "emotion_analysis_comics" / "incontext_learning" / "datasets"
 CURRENT_DIR = Path.cwd()
 ICL_DIR = CURRENT_DIR.parent
 DATASET_DIR = Path(ICL_DIR) / "datasets"
@@ -76,7 +68,6 @@ task_msg_l = []
 print("\n\n********** Computing K-neighbours and preparing prompts **********\n\n")
 for row in tqdm(test_df.iterrows(), total=len(test_df)):
     
-    #row[0] is index, row[1] is the data
     sys_msg = {"role": "system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You are given one utterance to classify and 3 example utterances to help you. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": \"<predicted emotion classes for the utterance (str)>}\"\n\n" + "### Examples:\n\n" + prepare_similar_example_prompts(row[1].utterance, k, train_df=train_df, test_df=test_df)}
     #sys_msg = {"role":"system", "content": "### Task description: You are an expert biomedical assistant that takes 1) an abstract text, 2) the list of all arguments from this abstract text, and must classify all arguments into one of two classes: Claim or Premise. " + proportion_desc + " You must absolutely not generate any text or explanation other than the following JSON format {\"Argument 1\": <predicted class for Argument 1 (str)>, ..., \"Argument n\": <predicted class for Argument n (str)>}\n\n### Class definitions:" + " Claim = " + claim_fulldesc + " Premise = " + premise_fulldesc + "\n\n### Examples:\n\n" + prepare_similar_example_prompts(title_l[i], experiment_df, k=3, seed=seed)}  # Sample by similar title
     task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
@@ -93,7 +84,6 @@ for i in range(len(sys_msg_l)):
 
 inputs = inference_tokenizer.apply_chat_template(
             prepared_sys_task_msg_l,
-            #tools=tools,
             # pad_token = tokenizer.eos_token,
             padding=True,
             truncation=True,
@@ -142,18 +132,18 @@ for batch in generated_outputs:
     
  
 grounds = test_df.emotions_list.tolist()   
-predictions = read_json_preds(decoded_outputs)
 
 results_file = Path(OUTPUT_DIR) / f"results_{k}.pickle"
 results_file.parent.mkdir(parents=True, exist_ok=True)
 
 with results_file.open('wb') as fh:
     results_d = {"ground_truths": grounds,
-                 "predictions": predictions    
+                 "predictions": decoded_outputs    
         
     }
     pickle.dump(results_d, fh)
-
+    
+predictions = read_json_preds(decoded_outputs)
 
 true_matrix, predicted_matrix = post_process_icl(grounds, predictions)
 
