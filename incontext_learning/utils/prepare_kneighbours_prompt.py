@@ -3,17 +3,18 @@ import random
 from operator import itemgetter
 import torch.nn.functional as F
 
+# device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
 def get_k_neighbours(k, utterance, train_df, test_df):
     
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
+    
     test_utterance_embedding = test_df[test_df.utterance == utterance]["utterance_embedding"].values[0]
-    test_utterance_embedding = torch.tensor(test_utterance_embedding).to(device)
+    #test_utterance_embedding = torch.tensor(test_utterance_embedding).to(device)
 
     utterance_embed_d = {}
     for e in train_df.iterrows():
         if e[1].utterance not in utterance_embed_d:
-            utterance_embed_d[e[1].utterance] = torch.tensor(e[1].utterance_embedding).to(device)
+            utterance_embed_d[e[1].utterance] = e[1].utterance_embedding
 
     # train_titles = set(df[df.split == 'TRAIN'].title.unique())
     train_utterances = set(train_df.utterance)
@@ -22,7 +23,7 @@ def get_k_neighbours(k, utterance, train_df, test_df):
     for t, v in utterance_embed_d.items():
         if t in train_utterances:
             # d = cos_sim(title_embed_d[title], v)
-            d = F.cosine_similarity(test_utterance_embedding, v, dim=0)
+            d = F.cosine_similarity(torch.tensor(test_utterance_embedding), torch.tensor(v), dim=0)
             dist_l.append((t, d.item()))
 
     sorted_dist_l = sorted(dist_l, key=itemgetter(1), reverse=True)

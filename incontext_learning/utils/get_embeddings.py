@@ -1,10 +1,14 @@
+import torch
 from tqdm import tqdm
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 
-embedding_tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
-embedding_model = AutoModel.from_pretrained("google-bert/bert-base-uncased")
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-def get_utterance_embeddings(df):
+embedding_tokenizer = AutoTokenizer.from_pretrained("google-bert/bert-base-uncased")
+embedding_model = AutoModel.from_pretrained("google-bert/bert-base-uncased").to(device)
+
+def get_utterance_embeddings(df):    
+    
     
     utterance_embed_d = {}
 
@@ -12,9 +16,9 @@ def get_utterance_embeddings(df):
         # print(utterance)
         while True:
             try:
-                inputs = embedding_tokenizer(utterance, return_tensors="pt")
+                inputs = embedding_tokenizer(utterance, return_tensors="pt").to(device)
                 output = embedding_model(**inputs)
-                embedding = output[1][0].squeeze()
+                embedding = output[1][0].squeeze().cpu()
                 utterance_embed_d[utterance] = embedding.detach().numpy()
                 break
             except Exception as e:
