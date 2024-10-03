@@ -15,7 +15,6 @@ This repository is organized as follows:
 
 ```
 .
-├── data_files
 ├── finetuning
 │   ├── data_preparation
 │   ├── datasets
