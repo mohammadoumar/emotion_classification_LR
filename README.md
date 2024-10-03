@@ -8,9 +8,8 @@
 
 This repository is organized as follows:
 
-1) **data_files**: this directory contains the raw data files containing the annotated data from comics titles. Every utterance is annotated with *emotion* and *speaker_id*.
-2) **finetuning**: this directory contains the implementation of LLM finetuning for comics. 
-3) **incontext_learning**: this directory contains the implementation of in-context learning with LLMs.
+1) **finetuning**: this directory contains the implementation of LLM finetuning for comics. 
+2) **incontext_learning**: this directory contains the implementation of in-context learning with LLMs.
 3) **zeroshot**: this directory contains the implementation of zero-shot classification for comics using LLMs.
 
 ```
