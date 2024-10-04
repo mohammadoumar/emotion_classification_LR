@@ -53,6 +53,7 @@ Temporary Items
 data_files/
 LLaMA-Factory/
 **/training_logs/
+**/datasets/
 **/adapter_model.safetensors
 **/tokenizer.json
 **/optimizer.pt
