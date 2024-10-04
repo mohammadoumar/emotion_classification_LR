@@ -50,8 +50,10 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api/jupyternotebooks,macos
 
+/bert/results
 data_files/
 LLaMA-Factory/
+**/logs
 **/training_logs/
 **/datasets/
 **/adapter_model.safetensors
