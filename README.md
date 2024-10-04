@@ -8,29 +8,25 @@
 
 This repository is organized as follows:
 
-1) **finetuning**: this directory contains the implementation of LLM finetuning for comics. 
-2) **incontext_learning**: this directory contains the implementation of in-context learning with LLMs.
-3) **zeroshot**: this directory contains the implementation of zero-shot classification for comics using LLMs.
+1) **data:** this directory contains the datasets used for the experiments.
+1) **finetuning:** this directory contains the implementation of LLM finetuning for comics. 
+2) **incontext_learning:** this directory contains the implementation of in-context learning with LLMs.
+3) **zeroshot:** this directory contains the implementation of zero-shot classification for comics using LLMs.
 
 ```
 .
+├── data
 ├── finetuning
-│   ├── data_preparation
-│   ├── datasets
-│   ├── finetuned_models
-│   ├── finetuning_model_args
-│   ├── finetuning_scripts
-│   ├── notebooks
-│   ├── training_logs
+│   ├── saved_models
+│   ├── model_args
+│   ├── scripts
 │   └── utils
 ├── incontext_learning
-│   ├── datasets
 │   ├── notebooks
 │   ├── results
 │   ├── scripts
 │   └── utils
 └── zeroshot
-    ├── datasets
     ├── notebooks
     ├── results
     ├── scripts
@@ -46,10 +42,15 @@ We experiment with the following models:
 
 - **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
 - **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
+
+- **Gemma-2-2B-it** -- [**Google**](google/gemma-2-2b-it)
 - **Gemma-2-9B-it** -- [**Google**](google/gemma-2-9b-it)
-- **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
+
 - **Qwen-2-7B-Instruct** -- [**Qwen**](Qwen/Qwen2-7B-Instruct)
 - **Qwen-2.5-1.5B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-1.5B-Instruct)
+- **Qwen-2.5-7B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-7B-Instruct)
+
+- **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
 - **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
 - **Falcon-7b-instruct** -- [**Technology Innovation Institute**](tiiuae/falcon-7b-instruct)
 
@@ -57,7 +58,7 @@ We experiment with the following models:
 
 # 🧮 Data
 
-We experiment with a dataset which consists of 32 (and increasing) annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)* or *Joy (JO)*, and *Neutral* which fit neither of the afore-mentioned classes. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utternaces. 
+We experiment with a dataset which consists of 38 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)* or *Joy (JO)*, and *Neutral* which fit neither of the afore-mentioned classes. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utternaces. 
 
 <br>
 
