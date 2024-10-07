@@ -8,13 +8,15 @@
 
 This repository is organized as follows:
 
-1) **data:** this directory contains the datasets used for the experiments.
-1) **finetuning:** this directory contains the implementation of LLM finetuning for comics. 
-2) **incontext_learning:** this directory contains the implementation of in-context learning with LLMs.
-3) **zeroshot:** this directory contains the implementation of zero-shot classification for comics using LLMs.
+1) **bert:** this directory contains the implementation of BERT finetuning.
+2) **data:** this directory contains the datasets used for the experiments.
+3) **finetuning:** this directory contains the implementation of LLM finetuning for comics. 
+4) **incontext_learning:** this directory contains the implementation of in-context learning with LLMs.
+5) **zeroshot:** this directory contains the implementation of zero-shot classification for comics using LLMs.
 
 ```
 .
+├── bert
 ├── data
 ├── finetuning
 │   ├── saved_models
@@ -102,9 +104,9 @@ For all three modalities, we experiment with different prompting techniques.
 [{"instruction": 
   "### You are an expert in Emotion Analysis. You are given an utternace from a comic book enclosed by <UT></UT> tags. Your task is to classify each utterance as one or more the following emotion classes: "Anger" (AN), "Disgust" (DI), "Fear" (FE), "Sadness" (SA), "Surprise" (SU) or "Joy" (JO). You must return a list of emotion classes in following JSON format: {"list_emotion_classes": ["emotion_class (str)", "emotion_class (str)" ... "emotion_class (str)"]} where each element "emotion_classes (str)" is replaced by one ore more of the following abbreviated emotion class labels: "AN", "DI", "FE", "SA", "SU" or "JO". \n", 
 "input": 
-  "### Here is the utterance from a comic book: <UT>DID YOU HAVE TO ELECTROCUTE HER SO HARD?</UT>", 
+  "### Here is the utterance from a comic book: <UT>{utterance}</UT>", 
 "output": 
-  "{"list_emotion_classes": ["FE", "SU"]}"}]
+  "{"list_emotion_classes": {result}}"}]
 ```
 
 3) **In-Context Learning (ICL):** For ICL, an instance of the prompt with 3 examples (k = 3) is given below:
@@ -115,25 +117,25 @@ For all three modalities, we experiment with different prompting techniques.
 ### Examples:
 
 ## Example 1
-Utterance 1=QUIET… OH NO…
+Utterance 1={uterrance_1}
 
 # Result:
-{"utterance_emotions": "['fear', 'surprise']"}
+{"utterance_emotions": "{result_1}"}
 
 ## Example 2
-Utterance 2=HEY!
+Utterance 2={uterrance_2}
 
 # Result:
-{"utterance_emotions": "['surprise']"}
+{"utterance_emotions": "{result_1}"}
 
 ## Example 3
-Utterance 3=BUT FLORIAN… I…
+Utterance 3={uterrance_3}
 
 # Result:
-{"utterance_emotions": "['fear']"}
+{"utterance_emotions": "{result_1}"}
 
 # Utterance:
-HOW'S IT GOING?
+{utterance}
 
 # Result:
 ```
