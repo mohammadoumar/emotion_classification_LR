@@ -2,20 +2,20 @@ import json
 
 def opposite(component_type):
 
-    if component_type == "AN":
-        return "SU"
-    elif component_type == "DI":
-        return "JO"
-    elif component_type == "FE":
-        return "SA"
-    elif component_type == "SA":
-        return "AN"
-    elif component_type == "SU":
-        return "DI"
-    elif component_type == "JO":
-        return "FE"
+    if component_type == "Anger":
+        return "Surprise"
+    elif component_type == "Disgust":
+        return "Joy"
+    elif component_type == "Fear":
+        return "Sadness"
+    elif component_type == "Sadness":
+        return "Anger"
+    elif component_type == "Surprise":
+        return "Disgust"
+    elif component_type == "Joy":
+        return "Fear"
     elif component_type == "Neutral":
-        return "SA"
+        return "Joy"
 
 def harmonize_preds(grounds, preds):
 
