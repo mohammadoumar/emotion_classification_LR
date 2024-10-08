@@ -19,7 +19,7 @@ from tqdm import tqdm
 from llamafactory.chat import ChatModel
 from llamafactory.extras.misc import torch_gc
 from sklearn.metrics import classification_report
-from utils.post_processing import post_process
+#from utils.post_processing import post_process
 
 try:    
     assert torch.cuda.is_available() is True
@@ -184,14 +184,14 @@ with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), 'w
 
 # **************************** POST-PROCESSING ************************ #
 
-with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), "rb") as fh:
+# with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), "rb") as fh:
         
-        results = pickle.load(fh)
+#         results = pickle.load(fh)
 
-task_grounds, task_preds = post_process(results)
+# task_grounds, task_preds = post_process(results)
 
-print(classification_report(task_grounds, task_preds, digits=3))
+# print(classification_report(task_grounds, task_preds, digits=3))
 
-with open(f"""{OUTPUT_DIR}/classification_report.pickle""", 'wb') as fh:
+# with open(f"""{OUTPUT_DIR}/classification_report.pickle""", 'wb') as fh:
     
-    pickle.dump(classification_report(task_grounds, task_preds, output_dict=True), fh)
+#     pickle.dump(classification_report(task_grounds, task_preds, output_dict=True), fh)
