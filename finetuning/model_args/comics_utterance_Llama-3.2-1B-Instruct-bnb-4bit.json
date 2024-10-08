@@ -20,6 +20,7 @@
   "max_grad_norm": 1.0,
   "fp16": true,
   "quantization_bit": 4,
+  "use_liger_kernel": true,
   "logging_steps": 10,
   "save_steps": 5000,
   "logging_dir": "/Utilisateurs/umushtaq/emotion_analysis_comics/finetuning/training_logs",

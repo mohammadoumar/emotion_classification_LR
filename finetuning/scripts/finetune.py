@@ -120,6 +120,7 @@ args = dict(
   
   fp16=True,                             # use float16 mixed precision training
   quantization_bit=4,                    # use 4-bit QLoRA  
+  #use_liger_kernel=True,
   #quantization_device_map="auto",
   
   logging_steps=10,                      # log every 10 steps
@@ -144,6 +145,7 @@ p.wait()
 args = dict(
     
   model_name_or_path=BASE_MODEL, # use bnb-4bit-quantized Llama-3-8B-Instruct model
+  #model_name_or_path="/Utilisateurs/umushtaq/emotion_analysis_comics/finetuning/saved_models/comics_Llama-3.2-1B-Instruct-bnb-4bit",
   adapter_name_or_path=str(OUTPUT_DIR),            # load the saved LoRA adapters
   
   template="llama3",                     # same to the one in training
@@ -153,6 +155,7 @@ args = dict(
   quantization_bit=4,                    # load 4-bit quantized model
   quantization_device_map="auto"
 )
+
 
 model = ChatModel(args)
 
