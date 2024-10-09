@@ -60,15 +60,11 @@ We experiment with the following models:
 
 - **BERT** -- [**Google BERT**](https://huggingface.co/google-bert)
 
-- **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
-- **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
+- **LLaMA** -- LLaMA-3-8B-Instruct, LLaMA-3-70B-Instruct, LLaMA-3.1-8B-Instruct, LLaMA-3.1-70B-Instruct, LLaMA-3.2-1B-Instruct -- [**Meta AI**](https://huggingface.co/meta-llama)
 
-- **Gemma-2-2B-it** -- [**Google**](google/gemma-2-2b-it)
-- **Gemma-2-9B-it** -- [**Google**](google/gemma-2-9b-it)
+- **Gemma** -- Gemma-2-2B-it, Gemma-2-9B-it -- [**Google**](https://huggingface.co/google)
 
-- **Qwen-2-7B-Instruct** -- [**Qwen**](Qwen/Qwen2-7B-Instruct)
-- **Qwen-2.5-1.5B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-1.5B-Instruct)
-- **Qwen-2.5-7B-Instruct** -- [**Qwen**](Qwen/Qwen2.5-7B-Instruct)
+- **Qwen** -- Qwen-2-7B-Instruct, Qwen-2.5-1.5B-Instruct, Qwen-2.5-7B-Instruct -- [**Qwen**](https://huggingface.co/Qwen)
 
 - **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
 - **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
