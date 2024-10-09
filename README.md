@@ -10,17 +10,28 @@ This repository is organized as follows:
 
 1) **bert:** this directory contains the implementation of BERT finetuning.
 2) **data:** this directory contains the datasets used for the experiments.
-3) **finetuning:** this directory contains the implementation of LLM finetuning for comics. 
-4) **incontext_learning:** this directory contains the implementation of in-context learning with LLMs.
-5) **zeroshot:** this directory contains the implementation of zero-shot classification for comics using LLMs.
+3) **emory_nlp:** this directory contains the implementation for the Emory NLP dataset [**(Emory NLP).**](https://github.com/emorynlp/character-mining)
+4) **finetuning:** this directory contains the implementation of LLM finetuning for comics. 
+5) **incontext_learning:** this directory contains the implementation of in-context learning with LLMs.
+6) **meld:** this directory contains the implementation for the MELD dataset [**(MELD).**](https://affective-meld.github.io/)
+7) **zeroshot:** this directory contains the implementation of zero-shot classification for comics using LLMs.
+
+<br>
 
 ```
 .
 ├── bert
+│   ├── notebooks
 ├── data
+├── emory_nlp
+│   ├── model_args
+│   ├── notebooks
+│   ├── saved_models
+│   ├── scripts
 ├── finetuning
 │   ├── saved_models
 │   ├── model_args
+│   ├── notebooks
 │   ├── scripts
 │   └── utils
 ├── incontext_learning
@@ -28,6 +39,11 @@ This repository is organized as follows:
 │   ├── results
 │   ├── scripts
 │   └── utils
+├── meld
+│   ├── model_args
+│   ├── notebooks
+│   ├── saved_models
+│   ├── scripts
 └── zeroshot
     ├── notebooks
     ├── results
@@ -41,6 +57,8 @@ This repository is organized as follows:
 # ⛓️ Models
 
 We experiment with the following models:
+
+- **BERT** -- [**Google BERT**](https://huggingface.co/google-bert)
 
 - **LLaMA-3-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3-8B-Instruct)
 - **LLaMA-3.1-8B-Instruct** -- [**Meta AI**](meta-llama/Meta-Llama-3.1-8B-Instruct)
