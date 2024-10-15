@@ -74,7 +74,11 @@ We experiment with the following models:
 
 # 🧮 Data
 
-We experiment with a dataset which consists of 38 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)* or *Joy (JO)*, and *Neutral* which fit neither of the afore-mentioned classes. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utternaces. 
+We experiment with three datasets:
+
+1) **Comics:** Comics consists of 38 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)*, *Joy (JO)* and *Neutral*. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utterances.
+2) **EmoryNLP:** EmoryNLP consists of 
+3) **MELD:** MELD consists to  
 
 <br>
 
