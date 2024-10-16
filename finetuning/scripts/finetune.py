@@ -194,7 +194,7 @@ for prompt in tqdm(test_prompts):
 # SAVE GROUNDS AND PREDICTIONS *
 
 with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), 'wb') as fh:
-    results_d = {"ground_truths": test_grounds,
+    results_d = {"grounds": test_grounds,
                  "predictions": test_predictions    
         
     }
