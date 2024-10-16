@@ -52,6 +52,7 @@ Temporary Items
 
 /bert/results
 data_files/
+dataset_files/
 LLaMA-Factory/
 **/logs
 **/training_logs/
