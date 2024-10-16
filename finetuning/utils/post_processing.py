@@ -21,8 +21,7 @@ def extract_results(results):
 
     predictions_l = []
     for i in range(len(predictions)):
-        predictions_l.append(json.loads(predictions[i])['list_emotion_classes'])
-    
+        predictions_l.append(json.loads(predictions[i])['list_emotion_classes'])    
     
     return grounds_l, predictions_l
 
