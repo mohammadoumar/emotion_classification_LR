@@ -50,7 +50,7 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api/jupyternotebooks,macos
 
-/bert/results
+/bert/outputs
 data_files/
 dataset_files/
 LLaMA-Factory/
