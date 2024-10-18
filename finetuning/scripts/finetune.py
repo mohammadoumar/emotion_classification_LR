@@ -40,7 +40,7 @@ LLAMA_FACTORY_DIR = ERC_DIR / "LLaMA-Factory"
 
 BASE_MODEL = "unsloth/Llama-3.2-1B-Instruct-bnb-4bit"
 LOGGING_DIR = FT_DIR / "training_logs"
-OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics_{BASE_MODEL.split("/")[1]}"""
+OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_{BASE_MODEL.split("/")[1]}"""
 #OUTPUT_DIR = OUTPUT_DIR.as_posix()
 
 #print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
@@ -51,8 +51,8 @@ OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics_{BASE_MODEL.split("/")[1]}"""
 
 # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = f"""comics_utterance_train.json"""
-test_dataset_name = f"""comics_utterance_test.json"""
+train_dataset_name = f"""comics35_utterance_train.json"""
+test_dataset_name = f"""comics35_utterance_test.json"""
 
 train_dataset_file = DATASET_DIR / train_dataset_name
 test_dataset_file = DATASET_DIR / test_dataset_name
@@ -103,8 +103,8 @@ args = dict(
   dataset="comics",                      # dataset name
   template="llama3",                     # use llama3 prompt template
   #train_on_prompt=True,
-  val_size=0.2,
-  max_samples=5000,                       # use 500 examples in each dataset
+  val_size=0.1,
+  max_samples=10000,                       # use 500 examples in each dataset
 
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
@@ -193,7 +193,7 @@ for prompt in tqdm(test_prompts):
 
 # SAVE GROUNDS AND PREDICTIONS *
 
-with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), 'wb') as fh:
+with open(os.path.join(OUTPUT_DIR, f"""comics35_results_{NB_EPOCHS}.pickle"""), 'wb') as fh:
     results_d = {"grounds": test_grounds,
                  "predictions": test_predictions    
         
@@ -203,7 +203,7 @@ with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), 'w
 
 # **************************** POST-PROCESSING ************************ #
 
-with open(os.path.join(OUTPUT_DIR, f"""comics_results_{NB_EPOCHS}.pickle"""), "rb") as fh:
+with open(os.path.join(OUTPUT_DIR, f"""comics35_results_{NB_EPOCHS}.pickle"""), "rb") as fh:
         
         results = pickle.load(fh)
 

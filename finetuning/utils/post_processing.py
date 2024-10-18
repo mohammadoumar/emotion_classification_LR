@@ -4,7 +4,7 @@ from sklearn.preprocessing import MultiLabelBinarizer
 def post_process(results):
     
     grounds, predictions = extract_results(results)
-    predictions = harmonize_preds(predictions)
+    #predictions = harmonize_preds(predictions)
     grounds_matrix, predictions_matrix = get_mlb(grounds, predictions)
     
     return grounds_matrix, predictions_matrix
@@ -15,15 +15,15 @@ def extract_results(results):
     predictions = results["predictions"]
     predictions = [x["content"] for x in predictions]   
 
-    grounds_l = []
-    for i in range(len(grounds)):
-        grounds_l.append(json.loads(grounds[i])['list_emotion_classes'])    
+    grounds = [json.loads(x)["list_emotion_classes"] for x in grounds]  
 
-    predictions_l = []
-    for i in range(len(predictions)):
-        predictions_l.append(json.loads(predictions[i])['list_emotion_classes'])    
+    predictions = [json.loads(x["content"]) for x in predictions]   
+    predictions = [x['list_emotion_classes'] for x in predictions]
     
-    return grounds_l, predictions_l
+    grounds = [['Neutral'] if elem == [['Neutral']] else elem for elem in grounds]
+    predictions = [['Neutral'] if elem == [['Neutral']] else elem for elem in predictions]
+    
+    return grounds, predictions
 
 def harmonize_preds(predictions):
     
