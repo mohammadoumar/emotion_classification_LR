@@ -13,11 +13,9 @@ def extract_results(results):
     
     grounds = results["grounds"]
     predictions = results["predictions"]
-    predictions = [x["content"] for x in predictions]   
+    predictions = [json.loads(x["content"]) for x in predictions]
 
     grounds = [json.loads(x)["list_emotion_classes"] for x in grounds]  
-
-    predictions = [json.loads(x["content"]) for x in predictions]   
     predictions = [x['list_emotion_classes'] for x in predictions]
     
     grounds = [['Neutral'] if elem == [['Neutral']] else elem for elem in grounds]

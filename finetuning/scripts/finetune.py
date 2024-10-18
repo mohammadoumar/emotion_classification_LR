@@ -38,7 +38,7 @@ DATASET_DIR = FT_DIR / "datasets"
 ERC_DIR = FT_DIR.parent
 LLAMA_FACTORY_DIR = ERC_DIR / "LLaMA-Factory"
 
-BASE_MODEL = "unsloth/llama-3-8b-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 LOGGING_DIR = FT_DIR / "training_logs"
 OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_{BASE_MODEL.split("/")[1]}"""
 #OUTPUT_DIR = OUTPUT_DIR.as_posix()
