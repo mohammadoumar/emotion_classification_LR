@@ -8,7 +8,7 @@ all_reports = {}
 
 CURRENT_DIR = Path.cwd()
 FT_DIR = CURRENT_DIR.parent
-FINE_TUNED_MODELS_DIR = os.path.join(FT_DIR, "finetuned_models")
+FINE_TUNED_MODELS_DIR = os.path.join(FT_DIR, "saved_models")
 
 
 directories = [d for d in os.listdir(FINE_TUNED_MODELS_DIR) if os.path.isdir(os.path.join(FINE_TUNED_MODELS_DIR, d))]
