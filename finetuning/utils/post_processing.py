@@ -5,9 +5,9 @@ def post_process(results):
     
     grounds, predictions = extract_results(results)
     #predictions = harmonize_preds(predictions)
-    grounds_matrix, predictions_matrix = get_mlb(grounds, predictions)
+    grounds_matrix, predictions_matrix, classes = get_mlb(grounds, predictions)
     
-    return grounds_matrix, predictions_matrix
+    return grounds_matrix, predictions_matrix, classes
 
 def extract_results(results):
     
@@ -35,7 +35,7 @@ def get_mlb(grounds, predictions):
     grounds_mhot = mlb.fit_transform(grounds)
     predictions_mhot = mlb.transform(predictions)
     
-    return grounds_mhot, predictions_mhot
+    return grounds_mhot, predictions_mhot, mlb.classes_
     
 
 # def opposite(component_type):
