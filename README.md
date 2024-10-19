@@ -1,6 +1,6 @@
 # 📣 Introduction 📣
 
-**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as *zero-shot classification* (ZSC), *in-context learning* (ICL), *fine-tuning* (FT) and *retrieval augmented generation* (RAG). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
+**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as *zero-shot classification* (ZSC), *in-context learning* (ICL) and *fine-tuning* (FT). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
 
 <br>
 
@@ -60,11 +60,11 @@ We experiment with the following models:
 
 - **BERT** -- [**Google BERT**](https://huggingface.co/google-bert)
 
-- **LLaMA** -- LLaMA-3-8B-Instruct, LLaMA-3-70B-Instruct, LLaMA-3.1-8B-Instruct, LLaMA-3.1-70B-Instruct, LLaMA-3.2-1B-Instruct -- [**Meta AI**](https://huggingface.co/meta-llama)
+- **LLaMA** -- LLaMA-3-8B-Instruct, LLaMA-3-70B-Instruct, LLaMA-3.1-8B-Instruct, LLaMA-3.1-70B-Instruct, LLaMA-3.2-1B-Instruct, LLaMA-3.2-3B-Instruct -- [**Meta AI**](https://huggingface.co/meta-llama)
 
 - **Gemma** -- Gemma-2-2B-it, Gemma-2-9B-it -- [**Google**](https://huggingface.co/google)
 
-- **Qwen** -- Qwen-2-7B-Instruct, Qwen-2.5-1.5B-Instruct, Qwen-2.5-7B-Instruct -- [**Qwen**](https://huggingface.co/Qwen)
+- **Qwen** -- Qwen-2-7B-Instruct, Qwen-2.5-0.5B-Instruct, Qwen-2.5-1.5B-Instruct, Qwen-2.5-7B-Instruct -- [**Qwen**](https://huggingface.co/Qwen)
 
 - **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
 - **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
@@ -76,7 +76,7 @@ We experiment with the following models:
 
 We experiment with three datasets:
 
-1) **Comics:** Comics dataset consists of 38 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)*, *Joy (JO)* and *Neutral*. The 32 titles consist of 5,282 annotated utterances. Of these, the train set comprises of 3506 utterances and the test set of 1776 utterances.
+1) **Comics:** Comics dataset consists of 38 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)*, *Joy (JO)* and *Neutral*. The 35 titles consist of 7,129 annotated utterances. Of these, the train set comprises of 5803 utterances and the test set of 1326 utterances.
 2) **EmoryNLP:** EmoryNLP dataset consists of 97 episodes, 897 scenes, and 12,606 utterances based on the popular TV show called Friends, where each utterance is annotated with one of the seven emotions borrowed from the six primary emotions in the Willcox (1982)’s feeling wheel, sad, mad, scared, powerful, peaceful, joyful, and a default emotion of neutral.
 3) **MELD:** Multimodal EmotionLines Dataset (MELD) consists of more than 1400 dialogues and 13000 utterances from Friends TV series.
 
@@ -119,12 +119,7 @@ For all three modalities, we experiment with different prompting techniques.
 2) **Fine-Tuning (FT):** For fine-tuning, we used the template default for the respective model. In general, the prompt is in the {"instruction", "input", "output"} format given below:
 
 ```
-[{"instruction": 
-  "### You are an expert in Emotion Analysis. You are given an utternace from a comic book enclosed by <UT></UT> tags. Your task is to classify each utterance as one or more the following emotion classes: "Anger" (AN), "Disgust" (DI), "Fear" (FE), "Sadness" (SA), "Surprise" (SU) or "Joy" (JO). You must return a list of emotion classes in following JSON format: {"list_emotion_classes": ["emotion_class (str)", "emotion_class (str)" ... "emotion_class (str)"]} where each element "emotion_classes (str)" is replaced by one ore more of the following abbreviated emotion class labels: "AN", "DI", "FE", "SA", "SU" or "JO". \n", 
-"input": 
-  "### Here is the utterance from a comic book: <UT>{utterance}</UT>", 
-"output": 
-  "{"list_emotion_classes": {result}}"}]
+{'instruction': '### Emotion Analysis Expert Role\n\nYou are an advanced emotion analysis expert specializing in comic book dialogue interpretation. Your task is to analyze utterances and identify their emotional content.\n\nINPUT:\n- You will receive a single utterance from a comic book\n- The utterance may express one or multiple emotions\n\nTASK:\n1. Carefully analyze the emotional context and tone of the utterance\n2. Identify applicable emotions from the following classes:\n   "Anger", "Disgust", "Fear", "Sadness", "Surprise", "Joy", "Neutral"\n\nOUTPUT REQUIREMENTS:\n- Format: JSON object with a single key "list_emotion_classes"\n- Value: Array of one or more emotion classes as strings\n- Example: {"list_emotion_classes": ["Anger", "Fear"]}\n\nIMPORTANT NOTES:\n- Do not include any explanations in the output, only the JSON object\n\n', 'input': '### Here is the utterance from a comic book: {utterance}', 'output': '{"list_emotion_classes": ["Fear", "Surprise"]}'}
 ```
 
 3) **In-Context Learning (ICL):** For ICL, an instance of the prompt with 3 examples (k = 3) is given below:
