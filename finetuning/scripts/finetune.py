@@ -38,7 +38,7 @@ DATASET_DIR = FT_DIR / "datasets"
 ERC_DIR = FT_DIR.parent
 LLAMA_FACTORY_DIR = ERC_DIR / "LLaMA-Factory"
 
-BASE_MODEL = "unsloth/Qwen2.5-1.5B-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/gemma-2-27b-it-bnb-4bit"
 LOGGING_DIR = FT_DIR / "training_logs"
 OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_{BASE_MODEL.split("/")[1]}"""
 #OUTPUT_DIR = OUTPUT_DIR.as_posix()
@@ -101,7 +101,7 @@ args = dict(
   overwrite_output_dir=True,             # overrides existing output contents
 
   dataset="comics",                      # dataset name
-  template="qwen",                     # use llama3 prompt template
+  template="gemma",                     # use llama3 prompt template
   #train_on_prompt=True,
   val_size=0.1,
   max_samples=10000,                       # use 500 examples in each dataset
@@ -148,7 +148,7 @@ args = dict(
   #model_name_or_path="/Utilisateurs/umushtaq/emotion_analysis_comics/finetuning/saved_models/comics_Llama-3.2-1B-Instruct-bnb-4bit",
   adapter_name_or_path=str(OUTPUT_DIR),            # load the saved LoRA adapters
   
-  template="qwen",                     # same to the one in training
+  template="gemma",                     # same to the one in training
   temperature=0.1,
   
   finetuning_type="lora",                  # same to the one in training
