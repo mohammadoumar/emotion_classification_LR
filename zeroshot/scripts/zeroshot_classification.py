@@ -15,8 +15,9 @@ from pathlib import Path
 from sklearn.metrics import classification_report
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 
+#from utils.post_processing import *
+
 sys.path.append('../')
-#dist.init_process_group(backend='nccl', rank=0, world_size=1)
 
 from utils.pre_process import *
 from utils.post_processing import *
@@ -31,8 +32,8 @@ model_id = args.model
 
 CURRENT_DIR = Path.cwd()
 ZS_DIR = CURRENT_DIR.parent
-DATASET_DIR = Path(ZS_DIR) / "datasets"
-OUTPUT_DIR = Path(ZS_DIR) / "results" / f"zs_{model_id.split('/')[1]}"
+DATASET_DIR = Path(ZS_DIR).parent / "dataset_files"
+OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_{model_id.split('/')[1]}"
 
 # DATASET_DIR = os.path.join(ZS_DIR, "datasets")
 # OUTPUT_DIR = os.path.abspath(os.path.join(ZS_DIR, "results", f"""zs_{model_id.split("/")[1]}"""))
@@ -42,13 +43,13 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"zs_{model_id.split('/')[1]}"
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
 inference_tokenizer.pad_token = inference_tokenizer.eos_token
-#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 #inference_tokenizer.chat_template = "llama"
 
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.bfloat16,
-    attn_implementation="flash_attention_2",
+    #attn_implementation="flash_attention_2",
     device_map="auto",
 )
 
@@ -63,7 +64,7 @@ generation_model = AutoModelForCausalLM.from_pretrained(
 
 
 
-df = pd.read_csv(os.path.join(DATASET_DIR, "comics_data_processed.csv"))
+df = pd.read_csv(os.path.join(DATASET_DIR, "comics_dataset.csv"))
 df['emotions_list'] = df.apply(lambda row: extract_emotions(row), axis=1)
 df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 
@@ -88,6 +89,36 @@ df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 
 # * Prompt Prepration for Gemma
 
+def build_instruction():
+    emotion_classes = ["anger", "disgust", "fear", "sadness", "surprise", "joy", "neutral"]
+    formatted_classes = ", ".join([f'"{emotion}"' for emotion in emotion_classes])
+    
+    instruction = f"""### Emotion Analysis Expert Role
+
+You are an advanced emotion analysis expert specializing in comic book dialogue interpretation. Your task is to analyze utterances and identify their emotional content.
+
+INPUT:
+- You will receive a single utterance from a comic book
+- The utterance may express one or multiple emotions
+
+TASK:
+1. Carefully analyze the emotional context and tone of the utterance
+2. Identify applicable emotions from the following classes:
+   {formatted_classes}
+
+OUTPUT REQUIREMENTS:
+- Format: JSON object with a single key "list_emotion_classes"
+- Value: Array of one or more emotion classes as strings
+- Example: {{"list_emotion_classes": ["anger", "fear"]}}
+
+IMPORTANT NOTES:
+- Do not include any explanations in the output, only the JSON object
+
+"""
+    return instruction
+
+instruction = build_instruction()
+
 sys_msg_l = []
 task_msg_l = []
 #top_msg_l = []
@@ -96,17 +127,20 @@ prepared_sys_task_msg_l = []
 for row in df.iterrows():
 
     #top_msg = {"role": "system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": \"<predicted emotion classes for the utterance (str)>}\"\n\n"}
-    sys_msg = {"role":"system", "content": "### Task description: You are an expert sentiment analysis assistant that takes an utterance from a comic book and must classify the utterance into appropriate emotion class(s): anger, surprise, fear, disgust, sadness, joy, neutral. You must absolutely not generate any text or explanation other than the following JSON format: {\"utterance_emotion\": <predicted emotion classes for the utterance (str)>}" + f"\n\n# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
-    #task_msg = {"role":"user", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+    #sys_msg = {"role":"user", "content": instruction}
+    #task_msg = {"role":"assistant", "content": f"# Utterance:\n{row[1].utterance}\n\n# Result:\n"}
+    sys_msg = {"role": "system", "content": build_instruction()}
+    task_msg = {"role": "assistant", "content": f"""Input: "{row[1].utterance}"
+Output:"""}
 
     sys_msg_l.append(sys_msg)
-    #task_msg_l.append(task_msg)
+    task_msg_l.append(task_msg)
     #top_msg_l.append(top_msg)
 
 for i in range(len(sys_msg_l)):
 
-    #prepared_sys_task_msg_l.append([sys_msg_l[i], task_msg_l[i]])
-    prepared_sys_task_msg_l.append([sys_msg_l[i]])
+    prepared_sys_task_msg_l.append([sys_msg_l[i], task_msg_l[i]])
+    #prepared_sys_task_msg_l.append([sys_msg_l[i]])
 
 ### 5. Run Classification / Generate labels ###
 
@@ -133,7 +167,7 @@ print(input_ids.shape)
 # print(x.shape)
 # x.to(generation_model.device)
 
-BATCH_SIZE = 256
+BATCH_SIZE = 128
 n = len(prepared_sys_task_msg_l)
 
 for batch_num, i in enumerate(tqdm(range(0, n, BATCH_SIZE)), start=1):
@@ -147,7 +181,7 @@ for batch_num, i in enumerate(tqdm(range(0, n, BATCH_SIZE)), start=1):
     input_ids = batch,
     max_new_tokens=64,
     pad_token_id=inference_tokenizer.eos_token_id,
-    #eos_token_id=terminators,
+    eos_token_id=terminators,
     do_sample=True,
     temperature=0.1,
     top_p=0.9,
@@ -217,25 +251,25 @@ results_file = Path(OUTPUT_DIR) / "results.pickle"
 results_file.parent.mkdir(parents=True, exist_ok=True)
 
 with results_file.open('wb') as fh:
-    results_d = {"ground_truths": grounds,
+    results_d = {"grounds": grounds,
                  "predictions": outputs_l    
         
     }
     pickle.dump(results_d, fh)
 
 
-preds = []
-for output in outputs_l:
-    for prediction in output:
-        try:
-            # Use json.loads to safely parse the JSON-like string
-            parsed_prediction = json.loads(prediction)
-            # Append the values of the parsed prediction to preds
-            preds.append(list(parsed_prediction.values()))
-        except json.JSONDecodeError as e:
-            print(f"Error decoding prediction: {e}")
-            # Optionally, append a placeholder or handle error
-            #preds.append([])  # or handle the error differently
+# preds = []
+# for output in outputs_l:
+#     for prediction in output:
+#         try:
+#             # Use json.loads to safely parse the JSON-like string
+#             parsed_prediction = json.loads(prediction)
+#             # Append the values of the parsed prediction to preds
+#             preds.append(list(parsed_prediction.values()))
+#         except json.JSONDecodeError as e:
+#             print(f"Error decoding prediction: {e}")
+#             # Optionally, append a placeholder or handle error
+#             #preds.append([])  # or handle the error differently
 
 # preds = []
 # for output in outputs_l:
@@ -260,14 +294,14 @@ for output in outputs_l:
 #         # Append each emotion list to the final list
 #         preds.append(emotions)
 
-print(len(preds))
+# print(len(preds))
 
-grounds_matrix, preds_matrix = post_process_zs(grounds, preds)
+# grounds_matrix, preds_matrix, classes = post_process(grounds, preds) # type: ignore
 
-print(classification_report(grounds_matrix, preds_matrix, target_names=all_labels, digits=3))
+# print(classification_report(grounds_matrix, preds_matrix, target_names=classes, digits=3))
 
-classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
+# classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
 
-with classification_file.open('wb') as fh:
+# with classification_file.open('wb') as fh:
     
-    pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=all_labels, output_dict=True), fh)
+#     pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=classes, output_dict=True), fh)
