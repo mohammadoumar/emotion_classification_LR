@@ -79,7 +79,6 @@ TASK:
 1. Carefully analyze the emotional context and tone of the utterance
 2. Identify applicable emotions from the following classes:
    {formatted_classes}
-3. ONLY use the valid emotion classes listed above. 
 
 OUTPUT REQUIREMENTS:
 - Format: JSON object with a single key "list_emotion_classes"
@@ -88,7 +87,6 @@ OUTPUT REQUIREMENTS:
 
 IMPORTANT NOTES:
 - Do not include any explanations in the output, only the JSON object
-- ONLY use labels from {formatted_classes} - no variations or new labels allowed
 
 """
     return instruction
@@ -181,12 +179,12 @@ with results_file.open('wb') as fh:
     pickle.dump(results_d, fh)
 
 
-grounds_matrix, preds_matrix, classes = post_process(grounds, preds) # type: ignore
+# grounds_matrix, preds_matrix, classes = post_process(grounds, preds) # type: ignore
 
-print(classification_report(grounds_matrix, preds_matrix, target_names=classes, digits=3))
+# print(classification_report(grounds_matrix, preds_matrix, target_names=classes, digits=3))
 
-classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
+# classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
 
-with classification_file.open('wb') as fh:
+# with classification_file.open('wb') as fh:
     
-    pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=classes, output_dict=True), fh)
+#     pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=classes, output_dict=True), fh)
