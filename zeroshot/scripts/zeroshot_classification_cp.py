@@ -129,7 +129,8 @@ inputs = inference_tokenizer.apply_chat_template(
 
 def batch_tensor(tensor, batch_size):
     return [tensor[i:i+batch_size] for i in range(0, tensor.size(0), batch_size)]
-BATCH_SIZE = 128
+
+BATCH_SIZE = 64
 input_ids_batches = batch_tensor(inputs['input_ids'], BATCH_SIZE) # type: ignore
 attention_mask_batches = batch_tensor(inputs['attention_mask'], BATCH_SIZE) # type: ignore
 
