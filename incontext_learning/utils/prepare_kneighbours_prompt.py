@@ -46,7 +46,7 @@ def prepare_similar_example_prompts(utterance, k, train_df, test_df, seed=33):
     prompt = ''
     cnt = 0
     for i, (utterance, dist) in enumerate(sampled_neighbours_l):
-        prompt += f'## Example {i+1}\n'
+        prompt += f'EXAMPLE {i+1}\n'
 
         example_df = train_df[train_df.utterance == utterance]
         # example_df = example_df[example_df.aty != 'none'].reset_index()
@@ -60,12 +60,12 @@ def prepare_similar_example_prompts(utterance, k, train_df, test_df, seed=33):
             #     cnt = 0
                 
             # prompt += f'Argument {cnt + 1}={k[1].text} - Class={k[1].aty}\n'
-            prompt += f'Utterance {cnt + 1}={k[1].utterance}\n'
+            prompt += f'Input: {k[1].utterance}'
             class_l.append(k[1].emotions_list)
             cnt += 1
             
-        prompt += '\n# Result:\n'
-        prompt += '{' + ', '.join([f'"utterance_emotions": "{class_l[i]}"' for i in range(len(class_l))]) + '}'
+        prompt += '\nOutput: '
+        prompt += '{' + ', '.join([f'"list_emotion_classes": "{class_l[i]}"' for i in range(len(class_l))]) + '}'
         prompt += '\n\n'
 
     return prompt

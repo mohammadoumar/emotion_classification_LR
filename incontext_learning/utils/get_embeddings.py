@@ -1,6 +1,6 @@
 import torch
 from tqdm import tqdm
-from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
+from transformers import AutoTokenizer, AutoModel
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
