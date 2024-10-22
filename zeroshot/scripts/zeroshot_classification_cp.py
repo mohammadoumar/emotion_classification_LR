@@ -15,8 +15,6 @@ from pathlib import Path
 from sklearn.metrics import classification_report
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 
-#from utils.post_processing import *
-
 sys.path.append('../')
 
 from utils.pre_process import *
@@ -172,20 +170,21 @@ for batch in generated_outputs:
 results_file = Path(OUTPUT_DIR) / "results.pickle"
 results_file.parent.mkdir(parents=True, exist_ok=True)
 
+results_d = {"grounds": grounds,
+            "predictions": decoded_outputs            
+}
+
 with results_file.open('wb') as fh:
-    results_d = {"grounds": grounds,
-                 "predictions": decoded_outputs    
-        
-    }
+    
     pickle.dump(results_d, fh)
 
 
-# grounds_matrix, preds_matrix, classes = post_process(grounds, preds) # type: ignore
+grounds_matrix, preds_matrix, classes = post_process(results_d) # type: ignore
 
-# print(classification_report(grounds_matrix, preds_matrix, target_names=classes, digits=3))
+print(classification_report(grounds_matrix, preds_matrix, target_names=classes, digits=3))
 
-# classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
+classification_file = Path(OUTPUT_DIR) / "classification_report.pickle"
 
-# with classification_file.open('wb') as fh:
+with classification_file.open('wb') as fh:
     
-#     pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=classes, output_dict=True), fh)
+    pickle.dump(classification_report(grounds_matrix, preds_matrix, target_names=classes, output_dict=True), fh)

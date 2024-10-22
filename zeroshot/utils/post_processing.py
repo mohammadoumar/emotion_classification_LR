@@ -24,14 +24,13 @@ def extract_results(results):
 
     for i, pred in enumerate(predictions):
         try:
-            predictions_l.append(json.loads(pred)["list_emotion_classes"])
+            clean_pred = pred.strip('```json\n').strip('```')
+            predictions_l.append(json.loads(clean_pred)["list_emotion_classes"])
         except:
             print(i)
             non_matching_indices.append(i)  
             
     non_matching_indices.sort(reverse=True)
-
-# Remove elements from 'grounds' at the specified indices
     for idx in non_matching_indices:
     
         del grounds[idx]
