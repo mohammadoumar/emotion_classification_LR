@@ -98,7 +98,7 @@ prepared_sys_task_msg_l = []
 
 for row in df.iterrows():
 
-    sys_msg = {"role": "system", "content": build_instruction()}
+    sys_msg = {"role": "user", "content": build_instruction()}
     task_msg = {"role": "assistant", "content": f"""Input: "{row[1].utterance}"
 Output:"""}
 
