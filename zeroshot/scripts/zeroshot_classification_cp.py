@@ -39,7 +39,7 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_{model_id.split('/')[1]}"
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
 inference_tokenizer.pad_token = inference_tokenizer.eos_token
-terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 
 generation_model = AutoModelForCausalLM.from_pretrained(
@@ -147,7 +147,10 @@ for i, (input_ids_batch, attention_mask_batch) in enumerate(zip(input_ids_batche
     
     # Generate output using model.generate
     #generated = generation_model.generate(**inputs, max_new_tokens=32) # correct answers!
-    generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
+    # generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
+    #  temperature=0.1,
+    #  top_p=0.9,)
+    generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, do_sample=True,
      temperature=0.1,
      top_p=0.9,)
     
