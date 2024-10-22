@@ -20,7 +20,7 @@ from utils.prepare_kneighbours_prompt import *
 # *** Read Args *** #
 
 parser = argparse.ArgumentParser()
-parser.add_argument("model", help="The model to use for zero-shot classification.", type=str)
+parser.add_argument("model", help="The model to use for in-context learning.", type=str)
 parser.add_argument("k", help="the K examples to include.", type=int)
 
 args = parser.parse_args()
@@ -46,7 +46,7 @@ generation_model = AutoModelForCausalLM.from_pretrained(
 CURRENT_DIR = Path.cwd()
 ICL_DIR = CURRENT_DIR.parent
 DATASET_DIR = Path(ICL_DIR) / "datasets"
-OUTPUT_DIR = Path(ICL_DIR) / "results" / f"icl_{model_id.split('/')[1]}"
+OUTPUT_DIR = Path(ICL_DIR) / "results" / f"comics35_icl_{model_id.split('/')[1]}"
 
 # *** Read data *** #
 
@@ -62,6 +62,37 @@ train_df = df[df.split == "TRAIN"].reset_index(drop=True)
 test_df = df[df.split == "TEST"].reset_index(drop=True)
 
 # *** Get prompts with K-neighbours *** #
+
+
+def build_instruction():
+    
+    emotion_classes = ["anger", "disgust", "fear", "sadness", "surprise", "joy", "neutral"]
+    formatted_classes = ", ".join([f'"{emotion}"' for emotion in emotion_classes])
+    
+    instruction = f"""### Emotion Analysis Expert Role
+
+You are an advanced emotion analysis expert specializing in comic book dialogue interpretation. Your task is to analyze utterances and identify their emotional content.
+
+INPUT:
+- You will receive a single utterance from a comic book
+- The utterance may express one or multiple emotions
+
+TASK:
+1. Carefully analyze the emotional context and tone of the utterance
+2. Identify applicable emotions from the following classes:
+   {formatted_classes}
+
+OUTPUT REQUIREMENTS:
+- Format: JSON object with a single key "list_emotion_classes"
+- Value: Array of one or more emotion classes as strings
+- Example: {{"list_emotion_classes": ["anger", "fear"]}}
+
+IMPORTANT NOTES:
+- Do not include any explanations in the output, only the JSON object
+
+"""
+    return instruction
+
 
 sys_msg_l = []
 task_msg_l = []
@@ -137,21 +168,23 @@ grounds = test_df.emotions_list.tolist()
 results_file = Path(OUTPUT_DIR) / f"results_{k}.pickle"
 results_file.parent.mkdir(parents=True, exist_ok=True)
 
-with results_file.open('wb') as fh:
-    results_d = {"ground_truths": grounds,
-                 "predictions": decoded_outputs    
+results_d = {"grounds": grounds,
+            "predictions": decoded_outputs    
         
     }
+
+with results_file.open('wb') as fh:
+  
     pickle.dump(results_d, fh)
     
-predictions = read_json_preds(decoded_outputs)
+# predictions = read_json_preds(decoded_outputs)
 
-true_matrix, predicted_matrix = post_process_icl(grounds, predictions)
+# true_matrix, predicted_matrix = post_process_icl(grounds, predictions)
 
-print(classification_report(true_matrix, predicted_matrix, target_names=all_labels, digits=3))
+# print(classification_report(true_matrix, predicted_matrix, target_names=all_labels, digits=3))
 
-classification_file = Path(OUTPUT_DIR) / f"classification_report_{k}.pickle"
+# classification_file = Path(OUTPUT_DIR) / f"classification_report_{k}.pickle"
 
-with classification_file.open('wb') as fh:
+# with classification_file.open('wb') as fh:
     
-    pickle.dump(classification_report(true_matrix, predicted_matrix, target_names=all_labels, output_dict=True), fh)
+#     pickle.dump(classification_report(true_matrix, predicted_matrix, target_names=all_labels, output_dict=True), fh)
