@@ -31,8 +31,11 @@ model_id, k = args.model, args.k
 print("\n\n********* Instantiating model and tokenizer **********\n\n")
 
 
-inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
-inference_tokenizer.pad_token = inference_tokenizer.eos_token
+inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
+#inference_tokenizer.pad_token = inference_tokenizer.eos_token
+#inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
+#inference_tokenizer.pad_token = inference_tokenizer.bos_token
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<eos>")]
 terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 generation_model = AutoModelForCausalLM.from_pretrained(
@@ -120,7 +123,7 @@ for i in range(len(sys_msg_l)):
 
 inputs = inference_tokenizer.apply_chat_template(
             prepared_sys_task_msg_l,
-            #pad_token = inference_tokenizer.eos_token,
+            pad_token = inference_tokenizer.eos_token,
             padding=True,
             truncation=True,
             add_generation_prompt=True,
