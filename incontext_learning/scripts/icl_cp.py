@@ -36,7 +36,7 @@ inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left
 #inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
 #inference_tokenizer.pad_token = inference_tokenizer.bos_token
 #terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<eos>")]
-terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
@@ -123,7 +123,7 @@ for i in range(len(sys_msg_l)):
 
 inputs = inference_tokenizer.apply_chat_template(
             prepared_sys_task_msg_l,
-            pad_token = inference_tokenizer.eos_token,
+            #pad_token = inference_tokenizer.eos_token,
             padding=True,
             truncation=True,
             add_generation_prompt=True,
@@ -152,8 +152,8 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     outputs = generation_model.generate(
     **inputs,
     max_new_tokens=64,
-    pad_token_id=inference_tokenizer.eos_token_id,
-    eos_token_id=terminators,
+    #pad_token_id=inference_tokenizer.eos_token_id,
+    #eos_token_id=terminators,
     do_sample=True,
     temperature=0.1,
     top_p=0.9,
