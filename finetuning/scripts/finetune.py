@@ -49,93 +49,93 @@ OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_{BASE_MODEL.split("/")[1]}""
 # ****************** DATASET FILES ******************
 
 
-# *** TRAIN/TEST DATASET NAME/FILENAME *** #
+# # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = f"""comics35_utterance_train.json"""
+# train_dataset_name = f"""comics35_utterance_train.json"""
 test_dataset_name = f"""comics35_utterance_test.json"""
 
-train_dataset_file = DATASET_DIR / train_dataset_name
+# train_dataset_file = DATASET_DIR / train_dataset_name
 test_dataset_file = DATASET_DIR / test_dataset_name
 
 
-# *** TRAIN ARGS FILE PATH *** #
+# # *** TRAIN ARGS FILE PATH *** #
 
-if not os.path.exists(os.path.join(FT_DIR, "model_args")):
-    os.mkdir(os.path.join(FT_DIR, "model_args"))
+# if not os.path.exists(os.path.join(FT_DIR, "model_args")):
+#     os.mkdir(os.path.join(FT_DIR, "model_args"))
 
-train_file = FT_DIR / "model_args" / f"""{train_dataset_name.split(".")[0].split("train")[0]}{BASE_MODEL.split("/")[1]}.json"""
-#print(train_file)
+# train_file = FT_DIR / "model_args" / f"""{train_dataset_name.split(".")[0].split("train")[0]}{BASE_MODEL.split("/")[1]}.json"""
+# #print(train_file)
 
-# *** UPDATE dataset_info.json file in LLaMA-Factory *** #
+# # *** UPDATE dataset_info.json file in LLaMA-Factory *** #
 
-dataset_info_line =  {
-  "file_name": f"{train_dataset_file}",
-  "columns": {
-    "prompt": "instruction",
-    "query": "input",
-    "response": "output"
-  }
-}
+# dataset_info_line =  {
+#   "file_name": f"{train_dataset_file}",
+#   "columns": {
+#     "prompt": "instruction",
+#     "query": "input",
+#     "response": "output"
+#   }
+# }
 
-with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "r") as jsonFile:
-    data = json.load(jsonFile)
+# with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "r") as jsonFile:
+#     data = json.load(jsonFile)
 
-data["comics"] = dataset_info_line
+# data["comics"] = dataset_info_line
 
-with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "w") as jsonFile:
-    json.dump(data, jsonFile)
+# with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "w") as jsonFile:
+#     json.dump(data, jsonFile)
 
 
-# ************************** TRAIN MODEL ******************************#
+# # ************************** TRAIN MODEL ******************************#
 
 NB_EPOCHS = 2
 
-args = dict(
+# args = dict(
     
-  stage="sft",                           # do supervised fine-tuning
-  do_train=True,
+#   stage="sft",                           # do supervised fine-tuning
+#   do_train=True,
 
-  model_name_or_path=BASE_MODEL,         # use bnb-4bit-quantized Llama-3-8B-Instruct model
-  num_train_epochs=NB_EPOCHS,            # the epochs of training
-  output_dir=str(OUTPUT_DIR),                 # the path to save LoRA adapters
-  overwrite_output_dir=True,             # overrides existing output contents
+#   model_name_or_path=BASE_MODEL,         # use bnb-4bit-quantized Llama-3-8B-Instruct model
+#   num_train_epochs=NB_EPOCHS,            # the epochs of training
+#   output_dir=str(OUTPUT_DIR),                 # the path to save LoRA adapters
+#   overwrite_output_dir=True,             # overrides existing output contents
 
-  dataset="comics",                      # dataset name
-  template="llama3",                     # use llama3 prompt template
-  #train_on_prompt=True,
-  val_size=0.1,
-  max_samples=10000,                       # use 500 examples in each dataset
+#   dataset="comics",                      # dataset name
+#   template="llama3",                     # use llama3 prompt template
+#   #train_on_prompt=True,
+#   val_size=0.1,
+#   max_samples=10000,                       # use 500 examples in each dataset
 
-  finetuning_type="lora",                # use LoRA adapters to save memory
-  lora_target="all",                     # attach LoRA adapters to all linear layers
-  per_device_train_batch_size=2,         # the batch size
-  gradient_accumulation_steps=4,         # the gradient accumulation steps
-  lr_scheduler_type="cosine",            # use cosine learning rate scheduler
-  loraplus_lr_ratio=16.0,                # use LoRA+ algorithm with lambda=16.0
-  #temperature=0.5,
+#   finetuning_type="lora",                # use LoRA adapters to save memory
+#   lora_target="all",                     # attach LoRA adapters to all linear layers
+#   per_device_train_batch_size=2,         # the batch size
+#   gradient_accumulation_steps=4,         # the gradient accumulation steps
+#   lr_scheduler_type="cosine",            # use cosine learning rate scheduler
+#   loraplus_lr_ratio=16.0,                # use LoRA+ algorithm with lambda=16.0
+#   #temperature=0.5,
   
-  warmup_ratio=0.1,                      # use warmup scheduler    
-  learning_rate=5e-5,                    # the learning rate
-  max_grad_norm=1.0,                     # clip gradient norm to 1.0
+#   warmup_ratio=0.1,                      # use warmup scheduler    
+#   learning_rate=5e-5,                    # the learning rate
+#   max_grad_norm=1.0,                     # clip gradient norm to 1.0
   
-  fp16=True,                             # use float16 mixed precision training
-  quantization_bit=4,                    # use 4-bit QLoRA  
-  #use_liger_kernel=True,
-  #quantization_device_map="auto",
+#   fp16=True,                             # use float16 mixed precision training
+#   quantization_bit=4,                    # use 4-bit QLoRA  
+#   #use_liger_kernel=True,
+#   #quantization_device_map="auto",
   
-  logging_steps=10,                      # log every 10 steps
-  save_steps=5000,                       # save checkpoint every 1000 steps    
-  logging_dir=str(LOGGING_DIR),
+#   logging_steps=10,                      # log every 10 steps
+#   save_steps=5000,                       # save checkpoint every 1000 steps    
+#   logging_dir=str(LOGGING_DIR),
   
-  # use_unsloth=True,
-  report_to="tensorboard"                       # discards wandb
+#   # use_unsloth=True,
+#   report_to="tensorboard"                       # discards wandb
 
-)
+# )
 
-json.dump(args, open(train_file, "w", encoding="utf-8"), indent=2)
+# json.dump(args, open(train_file, "w", encoding="utf-8"), indent=2)
 
-p = subprocess.Popen(["llamafactory-cli", "train", train_file], cwd=LLAMA_FACTORY_DIR)
-p.wait()
+# p = subprocess.Popen(["llamafactory-cli", "train", train_file], cwd=LLAMA_FACTORY_DIR)
+# p.wait()
 
 
 # ********************** INFERENCES ON FINE_TUNED MODEL ******************** #
