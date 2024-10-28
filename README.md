@@ -76,7 +76,7 @@ We experiment with the following models:
 
 We experiment with three datasets:
 
-1) **Comics:** Comics dataset consists of 38 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)*, *Joy (JO)* and *Neutral*. The 35 titles consist of 7,129 annotated utterances. Of these, the train set comprises of 5803 utterances and the test set of 1326 utterances.
+1) **Comics:** Comics dataset consists of 35 annotated Comics titles. We use the Eckman emotions model which consists of six bases emotions: *Anger (AN)*, *Disgust (DI)*, *Fear (FE)*, *Sadness (SA)*, *Surprise (SU)*, *Joy (JO)* and *Neutral*. The 35 titles consist of 7,129 annotated utterances. Of these, the train set comprises of 5803 utterances and the test set of 1326 utterances.
 2) **EmoryNLP:** EmoryNLP dataset consists of 97 episodes, 897 scenes, and 12,606 utterances based on the popular TV show called Friends, where each utterance is annotated with one of the seven emotions borrowed from the six primary emotions in the Willcox (1982)’s feeling wheel, sad, mad, scared, powerful, peaceful, joyful, and a default emotion of neutral.
 3) **MELD:** Multimodal EmotionLines Dataset (MELD) consists of more than 1400 dialogues and 13000 utterances from Friends TV series.
 
