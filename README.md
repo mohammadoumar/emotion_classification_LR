@@ -1,7 +1,6 @@
 # 📣 Introduction 📣
 
-**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as *zero-shot classification* (ZSC), *in-context learning* (ICL) and *fine-tuning* (FT). We incorporate different contextual elements into the textual prompts such as, inter alia, scene information, page level information and title-author information.
-
+**Sentiment Analysis and Emotion Classification in Comics using LLMs:** This ongoing project addresses sentiment analysis and emotion classification in comics using large langauge models (LLMs). We reformulate emotion classification in comics as a *text generation task* where the LLM is prompted to generate the emotion label for utterance(s). We implement emotion classification as *zero-shot classification* (ZSC), *in-context learning* (ICL) and *fine-tuning* (FT).
 <br>
 
 # 📂 Repository Structure
@@ -10,10 +9,10 @@ This repository is organized as follows:
 
 1) **bert:** this directory contains the implementation of BERT finetuning.
 2) **data:** this directory contains the datasets used for the experiments.
-3) **emory_nlp:** this directory contains the implementation for the Emory NLP dataset [**(Emory NLP).**](https://github.com/emorynlp/character-mining)
+3) **emory_nlp:** this directory contains the implementation for the Emory NLP dataset.
 4) **finetuning:** this directory contains the implementation of LLM finetuning for comics. 
 5) **incontext_learning:** this directory contains the implementation of in-context learning with LLMs.
-6) **meld:** this directory contains the implementation for the MELD dataset [**(MELD).**](https://affective-meld.github.io/)
+6) **meld:** this directory contains the implementation for the MELD dataset.
 7) **zeroshot:** this directory contains the implementation of zero-shot classification for comics using LLMs.
 
 <br>
@@ -68,7 +67,7 @@ We experiment with the following models:
 
 - **Mistral-7B-Instruct** -- [**Mistral AI**](mistralai/Mistral-7B-Instruct-v0.3)
 - **Phi-3-mini-instruct** -- [**Microsoft**](microsoft/Phi-3-mini-4k-instruct)
-- **Falcon-7b-instruct** -- [**Technology Innovation Institute**](tiiuae/falcon-7b-instruct)
+- **Falcon-7b-instruct** -- [**TII Falcon**](tiiuae/falcon-7b-instruct)
 
 <br>
 
@@ -99,7 +98,6 @@ We use LLMs for three classification tasks:
 1) **Zero-Shot Classification (ZSC):** Zero-shot classification is a Deep Learning technique where the pre-trained model is used *off the shelf* (i.e. witout any further training) for inference on completely unseen data samples.
 2) **In-Context Learning (ICL):** In-Context Learning is a Deep Learning technique where a model is *guided* for accurate inference with the help of a few solved demonstrations added in the model's input prompt.
 3) **Fine-Tuning (FT):** Fine-tuning involves further training of a pre-trained model on a downstream dataset. This helps general-purpose model training to be complemented with task specific supervised training.
-4) **Retrieval Augmented Generation (RAG):** combines information retrieval with text generation models by allowing them to retrieve relevant external information before generating a response or an answer.
 
 <br>
 
