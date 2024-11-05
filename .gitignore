@@ -63,3 +63,4 @@ LLaMA-Factory/
 **/*.pyc
 .vscode
 dir_structure.txt
+*.code-workspace
