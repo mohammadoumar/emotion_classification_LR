@@ -47,7 +47,7 @@ The following hyperparameters were used during training:
 - optimizer: Adam with betas=(0.9,0.999) and epsilon=1e-08
 - lr_scheduler_type: cosine
 - lr_scheduler_warmup_ratio: 0.1
-- num_epochs: 5
+- num_epochs: 8
 - mixed_precision_training: Native AMP
 
 ### Training results

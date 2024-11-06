@@ -2,7 +2,7 @@
   "stage": "sft",
   "do_train": true,
   "model_name_or_path": "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit",
-  "num_train_epochs": 5,
+  "num_train_epochs": 8,
   "output_dir": "/Utilisateurs/umushtaq/emotion_analysis_comics/finetuning/saved_models/comics35_pg_nb_Meta-Llama-3.1-70B-Instruct-bnb-4bit",
   "overwrite_output_dir": true,
   "dataset": "comics",
