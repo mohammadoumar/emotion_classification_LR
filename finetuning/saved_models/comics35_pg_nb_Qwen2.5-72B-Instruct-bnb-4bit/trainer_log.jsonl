@@ -1,0 +1,13 @@
+{"current_steps": 10, "total_steps": 128, "loss": 0.9793, "learning_rate": 3.846153846153846e-05, "epoch": 0.6153846153846154, "percentage": 7.81, "elapsed_time": "0:06:22", "remaining_time": "1:15:10"}
+{"current_steps": 20, "total_steps": 128, "loss": 0.3345, "learning_rate": 4.9544292351888966e-05, "epoch": 1.2307692307692308, "percentage": 15.62, "elapsed_time": "0:12:44", "remaining_time": "1:08:48"}
+{"current_steps": 30, "total_steps": 128, "loss": 0.2863, "learning_rate": 4.735215677869128e-05, "epoch": 1.8461538461538463, "percentage": 23.44, "elapsed_time": "0:19:03", "remaining_time": "1:02:15"}
+{"current_steps": 40, "total_steps": 128, "loss": 0.2613, "learning_rate": 4.35022639915313e-05, "epoch": 2.4615384615384617, "percentage": 31.25, "elapsed_time": "0:25:23", "remaining_time": "0:55:50"}
+{"current_steps": 50, "total_steps": 128, "loss": 0.2304, "learning_rate": 3.828014292634509e-05, "epoch": 3.076923076923077, "percentage": 39.06, "elapsed_time": "0:31:46", "remaining_time": "0:49:33"}
+{"current_steps": 60, "total_steps": 128, "loss": 0.1877, "learning_rate": 3.207309441292325e-05, "epoch": 3.6923076923076925, "percentage": 46.88, "elapsed_time": "0:38:03", "remaining_time": "0:43:07"}
+{"current_steps": 70, "total_steps": 128, "loss": 0.1411, "learning_rate": 2.5341466844148775e-05, "epoch": 4.3076923076923075, "percentage": 54.69, "elapsed_time": "0:44:26", "remaining_time": "0:36:49"}
+{"current_steps": 80, "total_steps": 128, "loss": 0.0982, "learning_rate": 1.8584514241650666e-05, "epoch": 4.923076923076923, "percentage": 62.5, "elapsed_time": "0:50:42", "remaining_time": "0:30:25"}
+{"current_steps": 90, "total_steps": 128, "loss": 0.0524, "learning_rate": 1.2303368868954848e-05, "epoch": 5.538461538461538, "percentage": 70.31, "elapsed_time": "0:56:59", "remaining_time": "0:24:03"}
+{"current_steps": 100, "total_steps": 128, "loss": 0.0398, "learning_rate": 6.9638745440261084e-06, "epoch": 6.153846153846154, "percentage": 78.12, "elapsed_time": "1:03:15", "remaining_time": "0:17:42"}
+{"current_steps": 110, "total_steps": 128, "loss": 0.0148, "learning_rate": 2.962037134383211e-06, "epoch": 6.769230769230769, "percentage": 85.94, "elapsed_time": "1:09:34", "remaining_time": "0:11:23"}
+{"current_steps": 120, "total_steps": 128, "loss": 0.0091, "learning_rate": 5.946546135113862e-07, "epoch": 7.384615384615385, "percentage": 93.75, "elapsed_time": "1:15:47", "remaining_time": "0:05:03"}
+{"current_steps": 128, "total_steps": 128, "epoch": 7.876923076923077, "percentage": 100.0, "elapsed_time": "1:21:12", "remaining_time": "0:00:00"}
