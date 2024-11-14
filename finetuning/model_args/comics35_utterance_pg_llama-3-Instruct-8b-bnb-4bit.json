@@ -1,9 +1,9 @@
 {
   "stage": "sft",
   "do_train": true,
-  "model_name_or_path": "unsloth/llama-3-8b-bnb-4bit",
+  "model_name_or_path": "unsloth/llama-3-Instruct-8b-bnb-4bit",
   "num_train_epochs": 8,
-  "output_dir": "/Utilisateurs/umushtaq/emotion_analysis_comics/finetuning/saved_models/comics35_pg_nb_xx_llama-3-8b-bnb-4bit",
+  "output_dir": "/Utilisateurs/umushtaq/emotion_analysis_comics/finetuning/saved_models/comics35_pg_nb_xx_llama-3-Instruct-8b-bnb-4bit",
   "overwrite_output_dir": true,
   "dataset": "comics",
   "template": "llama3",
