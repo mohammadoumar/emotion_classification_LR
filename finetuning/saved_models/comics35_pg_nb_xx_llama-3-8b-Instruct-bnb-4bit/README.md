@@ -36,13 +36,13 @@ More information needed
 
 The following hyperparameters were used during training:
 - learning_rate: 5e-05
-- train_batch_size: 2
+- train_batch_size: 8
 - eval_batch_size: 8
 - seed: 42
 - distributed_type: multi-GPU
 - num_devices: 2
 - gradient_accumulation_steps: 4
-- total_train_batch_size: 16
+- total_train_batch_size: 64
 - total_eval_batch_size: 16
 - optimizer: Adam with betas=(0.9,0.999) and epsilon=1e-08
 - lr_scheduler_type: cosine

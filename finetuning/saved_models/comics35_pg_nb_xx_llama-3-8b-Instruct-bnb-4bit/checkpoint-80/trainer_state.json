@@ -63,15 +63,6 @@
       "learning_rate": 0.0,
       "loss": 0.1718,
       "step": 80
-    },
-    {
-      "epoch": 7.804878048780488,
-      "step": 80,
-      "total_flos": 1.6863980352333414e+17,
-      "train_loss": 0.28053746521472933,
-      "train_runtime": 486.5476,
-      "train_samples_per_second": 10.622,
-      "train_steps_per_second": 0.164
     }
   ],
   "logging_steps": 10,
