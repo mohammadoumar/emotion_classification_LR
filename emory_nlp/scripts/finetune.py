@@ -38,7 +38,7 @@ DATASET_DIR = Path(EMORYNLP_DIR) / "datasets"
 ERC_DIR = EMORYNLP_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Qwen2.5-7B-Instruct-bnb-4bit"
 LOGGING_DIR = os.path.join(EMORYNLP_DIR, "training_logs")
 OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_{BASE_MODEL.split("/")[1]}""")
 
@@ -99,7 +99,7 @@ args = dict(
   overwrite_output_dir=True,             # overrides existing output contents
 
   dataset="emory_nlp",                      # dataset name
-  template="llama3",                     # use llama3 prompt template
+  template="qwen",                     # use llama3 prompt template
 
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
@@ -133,7 +133,7 @@ p.wait()
 args = dict(
   model_name_or_path=BASE_MODEL, # use bnb-4bit-quantized Llama-3-8B-Instruct model
   adapter_name_or_path=OUTPUT_DIR,            # load the saved LoRA adapters
-  template="llama3",                     # same to the one in training
+  template="qwen",                     # same to the one in training
   finetuning_type="lora",                  # same to the one in training
   quantization_bit=4,                    # load 4-bit quantized model
 )
