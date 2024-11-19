@@ -38,7 +38,7 @@ DATASET_DIR = Path(EMORYNLP_DIR) / "datasets"
 ERC_DIR = EMORYNLP_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/llama-3-8b-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 LOGGING_DIR = os.path.join(EMORYNLP_DIR, "training_logs")
 OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_{BASE_MODEL.split("/")[1]}""")
 
