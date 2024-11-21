@@ -54,6 +54,7 @@ generation_model = AutoModelForCausalLM.from_pretrained(
 
 
 df = pd.read_csv(os.path.join(DATASET_DIR, "comics_dataset_pg.csv"))
+df['utterance'] = df['utterance'].apply(json.loads)
 #df['emotions_list'] = df.apply(lambda row: extract_emotions(row), axis=1)
 #df = df.drop(columns=[df.columns[0], df.columns[1]]).reset_index(drop=True)
 
@@ -99,9 +100,9 @@ IMPORTANT:
 
 def build_tagged_text(utterances):
 
-    concatenated_utterances = '\n'.join(f"{i + 1}. {line}" for i, line in enumerate(utterances))
+    result = '\n'.join(f'{i+1}: {line}' for i, line in enumerate(utterances))
     
-    question = f"""Now analyze these utterances in a page:\n{concatenated_utterances}"""
+    question = f"""Now analyze these utterances in a page:\n{result}"""
 
     return question
 
@@ -112,7 +113,8 @@ task_msg_l = []
 prepared_sys_task_msg_l = []
 
 for row in df.iterrows():
-
+    #print(type(row[1].utterance))
+    #break
     sys_msg = {"role": "user", "content": build_instruction()}
     task_msg = {"role": "assistant", "content": build_tagged_text(row[1].utterance)}
 
@@ -123,6 +125,9 @@ for row in df.iterrows():
 for i in range(len(sys_msg_l)):
 
     prepared_sys_task_msg_l.append([sys_msg_l[i], task_msg_l[i]])
+    
+    
+#print(prepared_sys_task_msg_l[0])
 
 ### 5. Run Classification / Generate labels ###
 
@@ -164,31 +169,36 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     # generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
     #  temperature=0.1,
     #  top_p=0.9,)
-    generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, do_sample=True,
+    generated = generation_model.generate(**inputs, max_new_tokens=256, pad_token_id=inference_tokenizer.eos_token_id, do_sample=True,
      temperature=0.1,
      top_p=0.9,)
     
     # Store the generated output
-    generated_outputs.append(generated)
+    #generated_outputs.append(generated)
+    #decoded_output = inference_tokenizer.decode(generated[0][input_ids_batch.shape[1]:], skip_special_tokens=True) # type: ignore
+    #generated_outputs.append(decoded_output)
+    for j, gen in enumerate(generated):
+        decoded_output = inference_tokenizer.decode(gen[input_ids_batch.shape[1]:], skip_special_tokens=True) # type: ignore
+        generated_outputs.append(decoded_output)
 
 
 ### 6. Save Results, Post Process and Save Classficiation Reports ###
 
 grounds = df.emotion_c.tolist()
 
-decoded_outputs = []
+# decoded_outputs = []
 
-for batch in generated_outputs:
+# for batch in generated_outputs:
 
-    for prediction in batch:
+#     for prediction in batch:
 
-        decoded_outputs.append(inference_tokenizer.decode(prediction, skip_special_tokens=True))
+#         decoded_outputs.append(inference_tokenizer.decode(prediction, skip_special_tokens=True))
 
 results_file = Path(OUTPUT_DIR) / "results.pickle"
 results_file.parent.mkdir(parents=True, exist_ok=True)
 
 results_d = {"grounds": grounds,
-            "predictions": decoded_outputs            
+             "predictions": generated_outputs            
 }
 
 with results_file.open('wb') as fh:
