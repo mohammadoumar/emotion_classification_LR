@@ -31,7 +31,7 @@ model_id = args.model
 CURRENT_DIR = Path.cwd()
 ZS_DIR = CURRENT_DIR.parent
 DATASET_DIR = Path(ZS_DIR).parent / "dataset_files"
-OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_{model_id.split('/')[1]}"
+OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_p2_{model_id.split('/')[1]}"
 
 
 
@@ -81,14 +81,16 @@ TASK:
 
 RULES:
 1. Use ONLY the labels listed above
-2. Output must be a JSON with single key "page_utterance_emotions"
-3. Value must be an array where:
+2. Output MUST BE a one-line compact JSON with single key "page_utterance_emotions"
+3. Respond ONLY with the JSON object. No additional text before or after.
+4. Value must be an array where:
    - Each element is an array of emotions for one utterance
    - Order matches the input utterances order
    - Multiple emotions are allowed per utterance
-4. No explanations, only JSON output
+5. No explanations, only JSON output
 
 IMPORTANT:
+- Respond with a ONE-LINE JSON
 - Each array element corresponds to one utterance
 - One utterance can have multiple emotions
 - Maintain exact spelling and case of emotion labels
