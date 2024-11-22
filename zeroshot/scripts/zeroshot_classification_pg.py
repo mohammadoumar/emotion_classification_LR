@@ -37,9 +37,9 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_p2_{model_id.split('/')
 
 ## 2. Instantiate Model and Tokenizer ###
 
-inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
-inference_tokenizer.pad_token = inference_tokenizer.eos_token
-#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
+#inference_tokenizer.pad_token = inference_tokenizer.eos_token
+terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 
 generation_model = AutoModelForCausalLM.from_pretrained(
@@ -139,6 +139,7 @@ messages = prepared_sys_task_msg_l
 inputs = inference_tokenizer.apply_chat_template(
             messages,
             padding=True,
+            #padding_side='left',
             truncation=True,
             add_generation_prompt=True,
             return_dict=True,
@@ -171,9 +172,12 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     # generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
     #  temperature=0.1,
     #  top_p=0.9,)
-    generated = generation_model.generate(**inputs, max_new_tokens=256, pad_token_id=inference_tokenizer.eos_token_id, do_sample=True,
+    # generated = generation_model.generate(**inputs, max_new_tokens=256, pad_token_id=inference_tokenizer.eos_token_id, do_sample=True,
+    #  temperature=0.1,
+    #  top_p=0.9,)
+    generated = generation_model.generate(**inputs, max_new_tokens=256, do_sample=True,
      temperature=0.1,
-     top_p=0.9,)
+     top_p=0.9)
     
     # Store the generated output
     #generated_outputs.append(generated)
