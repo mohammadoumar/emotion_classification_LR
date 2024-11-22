@@ -39,7 +39,7 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_p2_{model_id.split('/')
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left')
 #inference_tokenizer.pad_token = inference_tokenizer.eos_token
-terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 
 generation_model = AutoModelForCausalLM.from_pretrained(
