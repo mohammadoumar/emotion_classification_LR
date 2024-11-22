@@ -39,7 +39,7 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_p2_{model_id.split('/')
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding='left', padding_side='left')
 inference_tokenizer.pad_token = inference_tokenizer.eos_token
-terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 
 generation_model = AutoModelForCausalLM.from_pretrained(
@@ -149,7 +149,7 @@ inputs = inference_tokenizer.apply_chat_template(
 def batch_tensor(tensor, batch_size):
     return [tensor[i:i+batch_size] for i in range(0, tensor.size(0), batch_size)]
 
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 input_ids_batches = batch_tensor(inputs['input_ids'], BATCH_SIZE) # type: ignore
 attention_mask_batches = batch_tensor(inputs['attention_mask'], BATCH_SIZE) # type: ignore
 
