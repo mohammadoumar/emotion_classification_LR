@@ -145,7 +145,7 @@ Example Output:
 
 # FOR QWEN
 
-sys_msg_l = []
+#sys_msg_l = []
 usr_msg_l = []
 task_msg_l = []
 prepared_sys_task_msg_l = []
@@ -161,7 +161,7 @@ for _, row in df.iterrows():
     task_msg_l.append(task_msg)
 
 
-for i in range(len(sys_msg_l)):
+for i in range(len(usr_msg_l)):
 
     prepared_sys_task_msg_l.append([usr_msg_l[i], task_msg_l[i]])
 
