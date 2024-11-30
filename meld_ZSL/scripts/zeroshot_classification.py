@@ -65,30 +65,59 @@ df = pd.concat([df_train, df_dev, df_test], ignore_index=True)
 ### 4. Prepare Messages and Prompts ###
 
 def build_instruction():
-    
     emotion_classes = ["anger", "disgust", "fear", "sadness", "surprise", "joy", "neutral"]
     formatted_classes = ", ".join([f'"{emotion}"' for emotion in emotion_classes])
 
-    instruction = f"""### You are an expert in Emotion Analysis for the Friends TV show.
+    instruction = f"""### You are an Expert Emotion Classifier for Friends TV Show Utterances
 
 You are given an utterance from a Friends episode.
 
-Your task is to classify the utterance with a single emotion class from these options: "anger", "disgust", "fear", "sadness", "surprise", "joy" or "neutral".
+STRICT CLASSIFICATION RULES:
+1. ONLY use EXACTLY ONE emotion from this PREDEFINED list:
+   {formatted_classes}
+2. NO OTHER emotions are allowed under ANY circumstances
 
 Output Instructions:
-1. Return ONLY a JSON object with a single emotion class
-2. The JSON must have this exact structure: {{"emotion_class": "EMOTION"}}
-3. EMOTION must be one of the specified emotion classes
-4. Do NOT include any additional text or explanation
-5. Identify only one applicable emotions only from the following classes:
-   {formatted_classes}
+1. Return ONLY a valid JSON object with EXACTLY ONE emotion class
+2. The JSON must have this EXACT structure: {{"emotion_class": "EMOTION"}}
+3. The "emotion_class" MUST be one of the PREDEFINED emotions listed above
+4. ANY deviation from these emotions is STRICTLY FORBIDDEN
+
+CRITICAL CONSTRAINT: 
+- ONLY the listed emotions are valid
+- ANY other emotion is INVALID
+- You CANNOT create or use ANY emotion not in the original list
 
 Example Output:
 {{"emotion_class": "disgust"}}
 
 """    
-
     return instruction
+
+# def build_instruction():
+    
+#     emotion_classes = ["anger", "disgust", "fear", "sadness", "surprise", "joy", "neutral"]
+#     formatted_classes = ", ".join([f'"{emotion}"' for emotion in emotion_classes])
+
+#     instruction = f"""### You are an expert in Emotion Analysis for the Friends TV show.
+
+# You are given an utterance from a Friends episode.
+
+# Your task is to classify the utterance with a single emotion class from these options: "anger", "disgust", "fear", "sadness", "surprise", "joy" or "neutral".
+
+# Output Instructions:
+# 1. Return ONLY a JSON object with a single emotion class
+# 2. The JSON must have this exact structure: {{"emotion_class": "EMOTION"}}
+# 3. Identify only one applicable emotions only from the following classes:
+#    {formatted_classes}   
+# 4. Do NOT include any additional text or explanation
+
+# Example Output:
+# {{"emotion_class": "disgust"}}
+
+# """    
+
+#     return instruction
 
 
 # def build_instruction():
