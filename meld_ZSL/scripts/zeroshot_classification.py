@@ -38,7 +38,7 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"meld_zs_{model_id.split('/')[1]}"
 ## 2. Instantiate Model and Tokenizer ###
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id)
-inference_tokenizer.pad_token = inference_tokenizer.eos_token
+#inference_tokenizer.pad_token = inference_tokenizer.eos_token
 #terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 
@@ -235,7 +235,7 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     # generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
     #  temperature=0.1,
     #  top_p=0.9,)
-    generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, do_sample=True,
+    generated = generation_model.generate(**inputs, max_new_tokens=32, do_sample=True,
      temperature=0.1,
      top_p=0.9,)
     
