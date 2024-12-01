@@ -38,8 +38,8 @@ OUTPUT_DIR = Path(ZS_DIR) / "results" / f"meld_zs_{model_id.split('/')[1]}"
 ## 2. Instantiate Model and Tokenizer ###
 
 inference_tokenizer = AutoTokenizer.from_pretrained(model_id)
-#inference_tokenizer.pad_token = inference_tokenizer.eos_token
-#terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
+inference_tokenizer.pad_token = inference_tokenizer.eos_token
+terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
 
 generation_model = AutoModelForCausalLM.from_pretrained(
@@ -151,47 +151,47 @@ Example Output:
 
 #FOR LLAMA
 
-# sys_msg_l = []
-# usr_msg_l = []
-# task_msg_l = []
-# prepared_sys_task_msg_l = []
-
-# for _, row in df.iterrows():
-
-#     sys_msg = {"role": "system", "content": build_instruction()}
-#     usr_msg = {"role": "user", "content": f"Now classify this utterance:\n\n{row.Utterance}"}
-#     task_msg = {"role": "assistant", "content": "Output:"}
-
-#     sys_msg_l.append(sys_msg)
-#     usr_msg_l.append(usr_msg)
-#     task_msg_l.append(task_msg)
-
-
-# for i in range(len(sys_msg_l)):
-
-#     prepared_sys_task_msg_l.append([sys_msg_l[i], usr_msg_l[i], task_msg_l[i]])
-
-# FOR QWEN
-
-#sys_msg_l = []
+sys_msg_l = []
 usr_msg_l = []
 task_msg_l = []
 prepared_sys_task_msg_l = []
 
 for _, row in df.iterrows():
 
-    #sys_msg = {"role": "system", "content": build_instruction()}
-    usr_msg = {"role": "user", "content": build_instruction() + f"\n\nNow classify this utterance:\n\n{row.Utterance}"}
+    sys_msg = {"role": "system", "content": build_instruction()}
+    usr_msg = {"role": "user", "content": f"Now classify this utterance:\n\n{row.Utterance}"}
     task_msg = {"role": "assistant", "content": "Output:"}
 
-    #sys_msg_l.append(sys_msg)
+    sys_msg_l.append(sys_msg)
     usr_msg_l.append(usr_msg)
     task_msg_l.append(task_msg)
 
 
-for i in range(len(usr_msg_l)):
+for i in range(len(sys_msg_l)):
 
-    prepared_sys_task_msg_l.append([usr_msg_l[i], task_msg_l[i]])
+    prepared_sys_task_msg_l.append([sys_msg_l[i], usr_msg_l[i], task_msg_l[i]])
+
+# FOR QWEN
+
+#sys_msg_l = []
+# usr_msg_l = []
+# task_msg_l = []
+# prepared_sys_task_msg_l = []
+
+# for _, row in df.iterrows():
+
+#     #sys_msg = {"role": "system", "content": build_instruction()}
+#     usr_msg = {"role": "user", "content": build_instruction() + f"\n\nNow classify this utterance:\n\n{row.Utterance}"}
+#     task_msg = {"role": "assistant", "content": "Output:"}
+
+#     #sys_msg_l.append(sys_msg)
+#     usr_msg_l.append(usr_msg)
+#     task_msg_l.append(task_msg)
+
+
+# for i in range(len(usr_msg_l)):
+
+#     prepared_sys_task_msg_l.append([usr_msg_l[i], task_msg_l[i]])
 
 ### 5. Run Classification / Generate labels ###
 
@@ -213,7 +213,7 @@ inputs = inference_tokenizer.apply_chat_template(
 def batch_tensor(tensor, batch_size):
     return [tensor[i:i+batch_size] for i in range(0, tensor.size(0), batch_size)]
 
-BATCH_SIZE = 256
+BATCH_SIZE = 128
 input_ids_batches = batch_tensor(inputs['input_ids'], BATCH_SIZE) # type: ignore
 attention_mask_batches = batch_tensor(inputs['attention_mask'], BATCH_SIZE) # type: ignore
 
@@ -235,7 +235,7 @@ for i, (input_ids_batch, attention_mask_batch) in tqdm(enumerate(zip(input_ids_b
     # generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
     #  temperature=0.1,
     #  top_p=0.9,)
-    generated = generation_model.generate(**inputs, max_new_tokens=32, do_sample=True,
+    generated = generation_model.generate(**inputs, max_new_tokens=32, pad_token_id=inference_tokenizer.eos_token_id, eos_token_id=terminators, do_sample=True,
      temperature=0.1,
      top_p=0.9,)
     
