@@ -38,9 +38,9 @@ DATASET_DIR = Path(EMORYNLP_DIR) / "datasets"
 ERC_DIR = EMORYNLP_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/Llama-3.2-3B-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit"
 LOGGING_DIR = os.path.join(EMORYNLP_DIR, "training_logs")
-OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_{BASE_MODEL.split("/")[1]}""")
+OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_p2_{BASE_MODEL.split("/")[1]}""")
 
 # print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
 
@@ -50,8 +50,8 @@ OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_{BASE_MODEL
 
 # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = "emorynlp_utterance_train.json"
-test_dataset_name = "emorynlp_utterance_test.json"
+train_dataset_name = "emorynlp_utterance_p2_train.json"
+test_dataset_name = "emorynlp_utterance_p2_test.json"
 
 train_dataset_file = os.path.join(DATASET_DIR, train_dataset_name)
 test_dataset_file = os.path.join(DATASET_DIR, test_dataset_name)
@@ -86,7 +86,7 @@ with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "w") as jso
 
 # ************************** TRAIN MODEL ******************************#
 
-NB_EPOCHS = 5
+NB_EPOCHS = 3
 
 args = dict(
     
@@ -100,6 +100,10 @@ args = dict(
 
   dataset="emory_nlp",                      # dataset name
   template="llama3",                     # use llama3 prompt template
+  val_size=0.2,
+  
+  #train_on_prompt=True,
+  #mix_strategy="interleave_under",
 
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
@@ -149,28 +153,40 @@ test_prompts = []
 test_grounds = []
 
 for sample in test_dataset:
-    test_prompts.append("\nUser:" + sample["instruction"] + sample["input"])
+    #test_prompts.append("\nUser:" + sample["instruction"] + sample["input"])
+    #test_prompts.append(sample["instruction"] + sample["input"])
+    test_prompts.append(sample["instruction"] + sample["input"])
     test_grounds.append(sample["output"])
 
 
 # INFERENCE ON TEST SET #
 
+def batch_prompts(test_prompts, batch_size):
+    return [test_prompts[i:i+batch_size] for i in range(0, len(test_prompts), batch_size)]
+
+BATCH_SIZE = 128
 test_predictions = []
 
-for prompt in tqdm(test_prompts):
+#input_ids_batches = batch_tensor(inputs['input_ids'], BATCH_SIZE) # type: ignore
+#attention_mask_batches = batch_tensor(inputs['attention_mask'], BATCH_SIZE) # type: ignore
 
-    messages = []
-    messages.append({"role": "user", "content": prompt})
-
-    response = ""
+for prompts_batch in tqdm(batch_prompts(test_prompts, BATCH_SIZE)):
     
-    for new_text in model.stream_chat(messages):
-        #print(new_text, end="", flush=True)
-        response += new_text
-        #print()
-    test_predictions.append({"role": "assistant", "content": response})
+    for prompt in tqdm(prompts_batch):
 
-    torch_gc()
+        messages = []
+        messages.append({"role": "user", "content": prompt})
+        #messages.append(prompt)
+
+        response = ""
+        
+        for new_text in model.stream_chat(messages):
+            #print(new_text, end="", flush=True)
+            response += new_text
+            #print()
+        test_predictions.append(response)
+
+    #torch_gc()
 
 # SAVE GROUNDS AND PREDICTIONS *
 
