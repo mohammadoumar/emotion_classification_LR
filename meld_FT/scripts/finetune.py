@@ -38,9 +38,9 @@ DATASET_DIR = Path(MELD_DIR) / "datasets"
 ERC_DIR = MELD_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Qwen2.5-72B-Instruct-bnb-4bit"
 LOGGING_DIR = os.path.join(MELD_DIR, "training_logs")
-OUTPUT_DIR = os.path.join(MELD_DIR, "saved_models", f"""meld_{BASE_MODEL.split("/")[1]}""")
+OUTPUT_DIR = os.path.join(MELD_DIR, "saved_models", f"""meld_p2_{BASE_MODEL.split("/")[1]}""")
 
 # print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
 
@@ -50,12 +50,11 @@ OUTPUT_DIR = os.path.join(MELD_DIR, "saved_models", f"""meld_{BASE_MODEL.split("
 
 # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = "meld_utterance_train.json"
-test_dataset_name = "meld_utterance_test.json"
+train_dataset_name = "meld_utterance_p2_train.json"
+test_dataset_name = "meld_utterance_p2_test.json"
 
 train_dataset_file = os.path.join(DATASET_DIR, train_dataset_name)
 test_dataset_file = os.path.join(DATASET_DIR, test_dataset_name)
-
 
 # *** TRAIN ARGS FILE PATH *** #
 
@@ -86,7 +85,7 @@ with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "w") as jso
 
 # ************************** TRAIN MODEL ******************************#
 
-NB_EPOCHS = 2
+NB_EPOCHS = 3
 
 args = dict(
     
@@ -99,7 +98,9 @@ args = dict(
   overwrite_output_dir=True,             # overrides existing output contents
 
   dataset="meld",                      # dataset name
-  template="llama3",                     # use llama3 prompt template
+  template="qwen",                     # use llama3 prompt template
+  val_size=0.2,
+  train_on_prompt=True,
 
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
@@ -131,11 +132,11 @@ p.wait()
 # LOAD MODEL, ADD LORA ADAPTERS #
 
 args = dict(
-  model_name_or_path=BASE_MODEL, # use bnb-4bit-quantized Llama-3-8B-Instruct model
-  adapter_name_or_path=OUTPUT_DIR,            # load the saved LoRA adapters
-  template="llama3",                     # same to the one in training
-  finetuning_type="lora",                  # same to the one in training
-  quantization_bit=4,                    # load 4-bit quantized model
+  model_name_or_path=BASE_MODEL,        # use bnb-4bit-quantized Llama-3-8B-Instruct model
+  adapter_name_or_path=OUTPUT_DIR,      # load the saved LoRA adapters
+  template="qwen",                      # same to the one in training
+  finetuning_type="lora",               # same to the one in training
+  quantization_bit=4,                   # load 4-bit quantized model
 )
 
 model = ChatModel(args)
@@ -149,28 +150,53 @@ test_prompts = []
 test_grounds = []
 
 for sample in test_dataset:
-    test_prompts.append("\nUser:" + sample["instruction"] + sample["input"])
+    test_prompts.append(sample["instruction"] + sample["input"])
     test_grounds.append(sample["output"])
 
 
 # INFERENCE ON TEST SET #
 
+def batch_prompts(test_prompts, batch_size):
+    return [test_prompts[i:i+batch_size] for i in range(0, len(test_prompts), batch_size)]
+
+BATCH_SIZE = 128
 test_predictions = []
 
-for prompt in tqdm(test_prompts):
+#input_ids_batches = batch_tensor(inputs['input_ids'], BATCH_SIZE) # type: ignore
+#attention_mask_batches = batch_tensor(inputs['attention_mask'], BATCH_SIZE) # type: ignore
 
-    messages = []
-    messages.append({"role": "user", "content": prompt})
-
-    response = ""
+for prompts_batch in tqdm(batch_prompts(test_prompts, BATCH_SIZE)):
     
-    for new_text in model.stream_chat(messages):
-        #print(new_text, end="", flush=True)
-        response += new_text
-        #print()
-    test_predictions.append({"role": "assistant", "content": response})
+    for prompt in tqdm(prompts_batch):
 
-    torch_gc()
+        messages = []
+        messages.append({"role": "user", "content": prompt})
+        #messages.append(prompt)
+
+        response = ""
+        
+        for new_text in model.stream_chat(messages):
+            #print(new_text, end="", flush=True)
+            response += new_text
+            #print()
+        test_predictions.append({"role": "assistant", "content": response})
+
+# test_predictions = []
+
+# for prompt in tqdm(test_prompts):
+
+#     messages = []
+#     messages.append({"role": "user", "content": prompt})
+
+#     response = ""
+    
+#     for new_text in model.stream_chat(messages):
+#         #print(new_text, end="", flush=True)
+#         response += new_text
+#         #print()
+#     test_predictions.append({"role": "assistant", "content": response})
+
+    #torch_gc()
 
 # SAVE GROUNDS AND PREDICTIONS *
 
