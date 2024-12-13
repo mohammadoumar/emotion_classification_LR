@@ -12,7 +12,7 @@ import pandas as pd
 
 from tqdm import tqdm
 from pathlib import Path
-from sklearn.metrics import classification_report
+#from sklearn.metrics import classification_report
 from transformers import AutoTokenizer, AutoModel, AutoModelForCausalLM
 
 sys.path.append('../')
