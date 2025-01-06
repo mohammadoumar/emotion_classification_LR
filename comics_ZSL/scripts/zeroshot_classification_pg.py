@@ -41,17 +41,13 @@ inference_tokenizer = AutoTokenizer.from_pretrained(model_id, padding_side='left
 #inference_tokenizer.pad_token = inference_tokenizer.eos_token
 #terminators = [inference_tokenizer.eos_token_id, inference_tokenizer.convert_tokens_to_ids("<|eot_id|>")]
 
-
 generation_model = AutoModelForCausalLM.from_pretrained(
     model_id,
     torch_dtype=torch.bfloat16,
     device_map="auto",
 )
 
-
 ### 3. Read Data from CSV file ###
-
-
 
 df = pd.read_csv(os.path.join(DATASET_DIR, "comics_dataset_pg.csv"))
 df['utterance'] = df['utterance'].apply(json.loads)
@@ -117,6 +113,7 @@ prepared_sys_task_msg_l = []
 for row in df.iterrows():
     #print(type(row[1].utterance))
     #break
+    #break 
     sys_msg = {"role": "user", "content": build_instruction()}
     task_msg = {"role": "assistant", "content": build_tagged_text(row[1].utterance)}
 
