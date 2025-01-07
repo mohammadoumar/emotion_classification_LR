@@ -1,6 +1,6 @@
 {
-  "best_metric": 0.639348030090332,
-  "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/outputs_dir_tmp/checkpoint-25",
+  "best_metric": 0.4230431318283081,
+  "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/outputs_dir_tmp/checkpoint-50",
   "epoch": 4.166666666666667,
   "eval_steps": 25,
   "global_step": 75,
@@ -10,33 +10,54 @@
   "log_history": [
     {
       "epoch": 1.3888888888888888,
-      "eval_loss": 0.639348030090332,
-      "eval_runtime": 4.8964,
-      "eval_samples_per_second": 29.409,
-      "eval_steps_per_second": 3.676,
+      "grad_norm": 0.6214903593063354,
+      "learning_rate": 0.00029427384647592284,
+      "loss": 2.0529,
+      "step": 25
+    },
+    {
+      "epoch": 1.3888888888888888,
+      "eval_loss": 0.44377851486206055,
+      "eval_runtime": 25.2443,
+      "eval_samples_per_second": 5.704,
+      "eval_steps_per_second": 0.713,
       "step": 25
     },
     {
       "epoch": 2.7777777777777777,
-      "eval_loss": 0.6503474712371826,
-      "eval_runtime": 4.8527,
-      "eval_samples_per_second": 29.674,
-      "eval_steps_per_second": 3.709,
+      "grad_norm": 0.4895265996456146,
+      "learning_rate": 0.00026085133758309883,
+      "loss": 0.7921,
+      "step": 50
+    },
+    {
+      "epoch": 2.7777777777777777,
+      "eval_loss": 0.4230431318283081,
+      "eval_runtime": 23.0538,
+      "eval_samples_per_second": 6.246,
+      "eval_steps_per_second": 0.781,
       "step": 50
     },
     {
       "epoch": 4.166666666666667,
-      "eval_loss": 0.8348950147628784,
-      "eval_runtime": 4.8852,
-      "eval_samples_per_second": 29.477,
-      "eval_steps_per_second": 3.685,
+      "grad_norm": 0.9902066588401794,
+      "learning_rate": 0.00020418624992807295,
+      "loss": 0.5836,
+      "step": 75
+    },
+    {
+      "epoch": 4.166666666666667,
+      "eval_loss": 0.5133299231529236,
+      "eval_runtime": 23.0523,
+      "eval_samples_per_second": 6.247,
+      "eval_steps_per_second": 0.781,
       "step": 75
     }
   ],
-  "logging_steps": 100,
-  "max_steps": 360,
+  "logging_steps": 25,
+  "max_steps": 180,
   "num_input_tokens_seen": 0,
-  "num_train_epochs": 20,
+  "num_train_epochs": 10,
   "save_steps": 25,
   "stateful_callbacks": {
     "TrainerControl": {
@@ -50,7 +71,7 @@
       "attributes": {}
     }
   },
-  "total_flos": 7.85523876420649e+16,
+  "total_flos": 1.0675307009620378e+17,
   "train_batch_size": 16,
   "trial_name": null,
   "trial_params": null
