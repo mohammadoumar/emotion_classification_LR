@@ -1,7 +1,7 @@
 {
-  "best_metric": 0.44377851486206055,
+  "best_metric": 0.5453293323516846,
   "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/outputs_dir_tmp/checkpoint-25",
-  "epoch": 1.3888888888888888,
+  "epoch": 0.3472222222222222,
   "eval_steps": 25,
   "global_step": 25,
   "is_hyper_param_search": false,
@@ -9,25 +9,25 @@
   "is_world_process_zero": true,
   "log_history": [
     {
-      "epoch": 1.3888888888888888,
-      "grad_norm": 0.6214903593063354,
-      "learning_rate": 0.00029427384647592284,
-      "loss": 2.0529,
+      "epoch": 0.3472222222222222,
+      "grad_norm": 0.6935907602310181,
+      "learning_rate": 0.0002986424642651902,
+      "loss": 2.3849,
       "step": 25
     },
     {
-      "epoch": 1.3888888888888888,
-      "eval_loss": 0.44377851486206055,
-      "eval_runtime": 25.2443,
-      "eval_samples_per_second": 5.704,
-      "eval_steps_per_second": 0.713,
+      "epoch": 0.3472222222222222,
+      "eval_loss": 0.5453293323516846,
+      "eval_runtime": 23.7381,
+      "eval_samples_per_second": 6.066,
+      "eval_steps_per_second": 0.758,
       "step": 25
     }
   ],
   "logging_steps": 25,
-  "max_steps": 180,
+  "max_steps": 360,
   "num_input_tokens_seen": 0,
-  "num_train_epochs": 10,
+  "num_train_epochs": 5,
   "save_steps": 25,
   "stateful_callbacks": {
     "TrainerControl": {
@@ -41,8 +41,8 @@
       "attributes": {}
     }
   },
-  "total_flos": 3.5813721102237696e+16,
-  "train_batch_size": 16,
+  "total_flos": 3.16534078328832e+16,
+  "train_batch_size": 4,
   "trial_name": null,
   "trial_params": null
 }
