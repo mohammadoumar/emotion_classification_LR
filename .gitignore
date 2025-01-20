@@ -53,6 +53,7 @@ Temporary Items
 /bert/outputs
 data_files/
 dataset_files/
+comics_dataset_images/
 LLaMA-Factory/
 **/logs
 **/training_logs/
