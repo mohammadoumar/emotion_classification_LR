@@ -31,7 +31,7 @@ model_id = args.model
 CURRENT_DIR = Path.cwd()
 ZS_DIR = CURRENT_DIR.parent
 DATASET_DIR = Path(ZS_DIR).parent / "dataset_files"
-OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_p2_{model_id.split('/')[1]}"
+OUTPUT_DIR = Path(ZS_DIR) / "results" / f"comics35_zs_pg_p2_rr_{model_id.split('/')[1]}"
 
 
 
