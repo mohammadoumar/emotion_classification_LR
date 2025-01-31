@@ -1,7 +1,7 @@
 {
   "alpha_pattern": {},
   "auto_mapping": null,
-  "base_model_name_or_path": "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit",
+  "base_model_name_or_path": "unsloth/Qwen2.5-32B-Instruct-bnb-4bit",
   "bias": "none",
   "eva_config": null,
   "exclude_modules": null,
@@ -23,13 +23,13 @@
   "rank_pattern": {},
   "revision": null,
   "target_modules": [
-    "gate_proj",
-    "q_proj",
     "k_proj",
+    "q_proj",
     "o_proj",
-    "up_proj",
+    "down_proj",
     "v_proj",
-    "down_proj"
+    "up_proj",
+    "gate_proj"
   ],
   "task_type": "CAUSAL_LM",
   "use_dora": false,
