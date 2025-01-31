@@ -31,7 +31,7 @@ model_id = args.model
 CURRENT_DIR = Path.cwd()
 ZS_DIR = CURRENT_DIR.parent
 DATASET_DIR = Path(ZS_DIR) / "data_files"
-OUTPUT_DIR = Path(ZS_DIR) / "results" / f"emorynlp_zs_{model_id.split('/')[1]}"
+OUTPUT_DIR = Path(ZS_DIR) / "results" / f"emorynlp_zs_rr_{model_id.split('/')[1]}"
 
 
 
