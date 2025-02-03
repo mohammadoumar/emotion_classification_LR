@@ -1,0 +1,48 @@
+{
+  "best_metric": 0.29116010665893555,
+  "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/unilabel_comics_model/checkpoint-50",
+  "epoch": 0.3436426116838488,
+  "eval_steps": 50,
+  "global_step": 50,
+  "is_hyper_param_search": false,
+  "is_local_process_zero": true,
+  "is_world_process_zero": true,
+  "log_history": [
+    {
+      "epoch": 0.3436426116838488,
+      "grad_norm": 0.7456383109092712,
+      "learning_rate": 0.00029768926203399874,
+      "loss": 1.1644,
+      "step": 50
+    },
+    {
+      "epoch": 0.3436426116838488,
+      "eval_loss": 0.29116010665893555,
+      "eval_runtime": 14.6308,
+      "eval_samples_per_second": 79.353,
+      "eval_steps_per_second": 9.979,
+      "step": 50
+    }
+  ],
+  "logging_steps": 50,
+  "max_steps": 725,
+  "num_input_tokens_seen": 0,
+  "num_train_epochs": 5,
+  "save_steps": 50,
+  "stateful_callbacks": {
+    "TrainerControl": {
+      "args": {
+        "should_epoch_stop": false,
+        "should_evaluate": false,
+        "should_log": false,
+        "should_save": true,
+        "should_training_stop": false
+      },
+      "attributes": {}
+    }
+  },
+  "total_flos": 1.4174927116959744e+16,
+  "train_batch_size": 16,
+  "trial_name": null,
+  "trial_params": null
+}
