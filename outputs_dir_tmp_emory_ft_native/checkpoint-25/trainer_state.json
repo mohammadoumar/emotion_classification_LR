@@ -1,7 +1,7 @@
 {
-  "best_metric": 0.15030500292778015,
+  "best_metric": 0.1363167017698288,
   "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/outputs_dir_tmp_emory_ft_native/checkpoint-25",
-  "epoch": 0.847457627118644,
+  "epoch": 0.423728813559322,
   "eval_steps": 25,
   "global_step": 25,
   "is_hyper_param_search": false,
@@ -9,23 +9,23 @@
   "is_world_process_zero": true,
   "log_history": [
     {
-      "epoch": 0.847457627118644,
-      "grad_norm": 0.08715701103210449,
-      "learning_rate": 0.00024155844155844154,
-      "loss": 0.3324,
+      "epoch": 0.423728813559322,
+      "grad_norm": 0.18286536633968353,
+      "learning_rate": 0.00027305389221556883,
+      "loss": 1.1564,
       "step": 25
     },
     {
-      "epoch": 0.847457627118644,
-      "eval_loss": 0.15030500292778015,
-      "eval_runtime": 59.9346,
-      "eval_samples_per_second": 15.917,
-      "eval_steps_per_second": 2.002,
+      "epoch": 0.423728813559322,
+      "eval_loss": 0.1363167017698288,
+      "eval_runtime": 113.7742,
+      "eval_samples_per_second": 8.385,
+      "eval_steps_per_second": 0.132,
       "step": 25
     }
   ],
   "logging_steps": 25,
-  "max_steps": 87,
+  "max_steps": 177,
   "num_input_tokens_seen": 0,
   "num_train_epochs": 3,
   "save_steps": 25,
@@ -41,8 +41,8 @@
       "attributes": {}
     }
   },
-  "total_flos": 3.621501996682445e+17,
-  "train_batch_size": 128,
+  "total_flos": 4.026963439638282e+17,
+  "train_batch_size": 64,
   "trial_name": null,
   "trial_params": null
 }

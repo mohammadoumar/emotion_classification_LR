@@ -1,5 +1,5 @@
 ---
-base_model: unsloth/Qwen2.5-32B-Instruct-bnb-4bit
+base_model: unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit
 library_name: peft
 ---
 
