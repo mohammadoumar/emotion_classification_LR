@@ -38,9 +38,9 @@ DATASET_DIR = FT_DIR / "datasets"
 ERC_DIR = FT_DIR.parent
 LLAMA_FACTORY_DIR = ERC_DIR / "LLaMA-Factory"
 
-BASE_MODEL = "unsloth/Meta-Llama-3.1-70B-bnb-4bit"
+BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 LOGGING_DIR = FT_DIR / "training_logs"
-OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_pg_{BASE_MODEL.split("/")[1]}"""
+OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_pg_scenedesc_{BASE_MODEL.split("/")[1]}"""
 #OUTPUT_DIR = OUTPUT_DIR.as_posix()
 
 #print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
@@ -51,8 +51,8 @@ OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_pg_{BASE_MODEL.split("/")[1]
 
 # # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = f"""comics35_utterance_pg_train.json"""
-test_dataset_name = f"""comics35_utterance_pg_test.json"""
+train_dataset_name = f"""comics35_utterance_pg_scene_train.json"""
+test_dataset_name = f"""comics35_utterance_pg_scene_test.json"""
 
 train_dataset_file = DATASET_DIR / train_dataset_name
 test_dataset_file = DATASET_DIR / test_dataset_name
@@ -88,7 +88,7 @@ with open(os.path.join(LLAMA_FACTORY_DIR, "data/dataset_info.json"), "w") as jso
 
 # # ************************** TRAIN MODEL ******************************#
 
-NB_EPOCHS = 0.1
+NB_EPOCHS = 3
 
 args = dict(
     
@@ -128,7 +128,7 @@ args = dict(
   logging_dir=str(LOGGING_DIR),
   
   # use_unsloth=True,
-  report_to="tensorboard"                       # discards wandb
+  report_to="none"                       # discards wandb
 
 )
 
