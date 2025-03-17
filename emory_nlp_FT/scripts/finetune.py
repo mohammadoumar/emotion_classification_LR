@@ -38,9 +38,9 @@ DATASET_DIR = Path(EMORYNLP_DIR) / "datasets"
 ERC_DIR = EMORYNLP_DIR.parent
 LLAMA_FACTORY_DIR = os.path.join(ERC_DIR, "LLaMA-Factory")
 
-BASE_MODEL = "unsloth/Meta-Llama-3.1-70B-Instruct-bnb-4bit"
+BASE_MODEL = "unsloth/Qwen2.5-72B-Instruct-bnb-4bit"
 LOGGING_DIR = os.path.join(EMORYNLP_DIR, "training_logs")
-OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_p2_{BASE_MODEL.split("/")[1]}""")
+OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_scene_{BASE_MODEL.split("/")[1]}""")
 
 # print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
 
@@ -50,8 +50,8 @@ OUTPUT_DIR = os.path.join(EMORYNLP_DIR, "saved_models", f"""emorynlp_p2_{BASE_MO
 
 # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = "emorynlp_utterance_p2_train.json"
-test_dataset_name = "emorynlp_utterance_p2_test.json"
+train_dataset_name = "emorynlp_utterance_scene_train.json"
+test_dataset_name = "emorynlp_utterance_scene_test.json"
 
 train_dataset_file = os.path.join(DATASET_DIR, train_dataset_name)
 test_dataset_file = os.path.join(DATASET_DIR, test_dataset_name)
@@ -99,7 +99,7 @@ args = dict(
   overwrite_output_dir=True,             # overrides existing output contents
 
   dataset="emory_nlp",                      # dataset name
-  template="llama3",                     # use llama3 prompt template
+  template="qwen",                     # use llama3 prompt template
   val_size=0.2,
   
   #train_on_prompt=True,
@@ -108,7 +108,7 @@ args = dict(
   finetuning_type="lora",                # use LoRA adapters to save memory
   lora_target="all",                     # attach LoRA adapters to all linear layers
   per_device_train_batch_size=2,         # the batch size
-  gradient_accumulation_steps=4,         # the gradient accumulation steps
+  gradient_accumulation_steps=2,         # the gradient accumulation steps
   lr_scheduler_type="cosine",            # use cosine learning rate scheduler
   logging_steps=10,                      # log every 10 steps
   warmup_ratio=0.1,                      # use warmup scheduler
@@ -117,10 +117,10 @@ args = dict(
   max_samples=10000,                       # use 500 examples in each dataset
   max_grad_norm=1.0,                     # clip gradient norm to 1.0
   quantization_bit=4,                    # use 4-bit QLoRA
-  loraplus_lr_ratio=16.0,                # use LoRA+ algorithm with lambda=16.0
+  loraplus_lr_ratio=32.0,                # use LoRA+ algorithm with lambda=16.0
   fp16=True,                             # use float16 mixed precision training
   logging_dir=LOGGING_DIR,
-  report_to="tensorboard"                       # discards wandb
+  report_to="none"                       # discards wandb
 
 )
 
@@ -137,7 +137,7 @@ p.wait()
 args = dict(
   model_name_or_path=BASE_MODEL, # use bnb-4bit-quantized Llama-3-8B-Instruct model
   adapter_name_or_path=OUTPUT_DIR,            # load the saved LoRA adapters
-  template="llama3",                     # same to the one in training
+  template="qwen",                     # same to the one in training
   finetuning_type="lora",                  # same to the one in training
   quantization_bit=4,                    # load 4-bit quantized model
 )
@@ -190,7 +190,7 @@ for prompts_batch in tqdm(batch_prompts(test_prompts, BATCH_SIZE)):
 
 # SAVE GROUNDS AND PREDICTIONS *
 
-with open(os.path.join(OUTPUT_DIR, f"""emorynlp_results_{NB_EPOCHS}.pickle"""), 'wb') as fh:
+with open(os.path.join(OUTPUT_DIR, f"""emorynlp_resultss_{NB_EPOCHS}.pickle"""), 'wb') as fh:
     results_d = {"grounds": test_grounds,
                  "predictions": test_predictions    
         

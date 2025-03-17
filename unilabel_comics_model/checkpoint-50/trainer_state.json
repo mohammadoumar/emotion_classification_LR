@@ -1,5 +1,5 @@
 {
-  "best_metric": 0.05391089990735054,
+  "best_metric": 0.2955036759376526,
   "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/unilabel_comics_model/checkpoint-50",
   "epoch": 0.3436426116838488,
   "eval_steps": 50,
@@ -10,17 +10,17 @@
   "log_history": [
     {
       "epoch": 0.3436426116838488,
-      "grad_norm": 0.7340053915977478,
-      "learning_rate": 0.00029768926203399874,
-      "loss": 0.7413,
+      "grad_norm": 0.3872693181037903,
+      "learning_rate": 4.961487700566646e-05,
+      "loss": 0.7088,
       "step": 50
     },
     {
       "epoch": 0.3436426116838488,
-      "eval_loss": 0.05391089990735054,
-      "eval_runtime": 12.6573,
-      "eval_samples_per_second": 91.726,
-      "eval_steps_per_second": 11.535,
+      "eval_loss": 0.2955036759376526,
+      "eval_runtime": 94.2292,
+      "eval_samples_per_second": 12.321,
+      "eval_steps_per_second": 1.549,
       "step": 50
     }
   ],
@@ -41,7 +41,7 @@
       "attributes": {}
     }
   },
-  "total_flos": 1.035963733377024e+16,
+  "total_flos": 1.3669330189418496e+16,
   "train_batch_size": 16,
   "trial_name": null,
   "trial_params": null

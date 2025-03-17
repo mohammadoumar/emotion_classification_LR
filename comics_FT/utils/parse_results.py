@@ -27,7 +27,7 @@ for directory in directories:
 
             all_reports[directory] = classification_report
 
-with open(os.path.join(CURRENT_DIR, 'finetuning_classification_reports.json'), 'w') as json_file:
+with open(os.path.join(CURRENT_DIR, 'finetuning_classification_reports_latest.json'), 'w') as json_file:
     json.dump(all_reports, json_file, indent=4)
 
 print("Classification reports have been successfully dumped into 'finetuning_classification_reports.json'")

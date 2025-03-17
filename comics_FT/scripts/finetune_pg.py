@@ -40,7 +40,7 @@ LLAMA_FACTORY_DIR = ERC_DIR / "LLaMA-Factory"
 
 BASE_MODEL = "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit"
 LOGGING_DIR = FT_DIR / "training_logs"
-OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_pg_scenedesc_{BASE_MODEL.split("/")[1]}"""
+OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_pg_scenedesc_uni_{BASE_MODEL.split("/")[1]}"""
 #OUTPUT_DIR = OUTPUT_DIR.as_posix()
 
 #print(CURRENT_DIR, FT_DIR, DATASET_DIR, ERC_DIR, LLAMA_FACTORY_DIR, BASE_MODEL, OUTPUT_DIR, sep="\n")
@@ -51,8 +51,8 @@ OUTPUT_DIR = FT_DIR / "saved_models" / f"""comics35_pg_scenedesc_{BASE_MODEL.spl
 
 # # *** TRAIN/TEST DATASET NAME/FILENAME *** #
 
-train_dataset_name = f"""comics35_utterance_pg_scene_train.json"""
-test_dataset_name = f"""comics35_utterance_pg_scene_test.json"""
+train_dataset_name = f"""comics35_utterance_pg_unilabel_sc_train.json"""
+test_dataset_name = f"""comics35_utterance_pg_unilabel_sc_test.json"""
 
 train_dataset_file = DATASET_DIR / train_dataset_name
 test_dataset_file = DATASET_DIR / test_dataset_name

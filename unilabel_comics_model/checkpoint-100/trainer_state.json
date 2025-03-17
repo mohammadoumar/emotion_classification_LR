@@ -1,5 +1,5 @@
 {
-  "best_metric": 0.014580469578504562,
+  "best_metric": 0.2862032651901245,
   "best_model_checkpoint": "/Utilisateurs/umushtaq/emotion_analysis_comics/unilabel_comics_model/checkpoint-100",
   "epoch": 0.6872852233676976,
   "eval_steps": 50,
@@ -10,32 +10,32 @@
   "log_history": [
     {
       "epoch": 0.3436426116838488,
-      "grad_norm": 0.7340053915977478,
-      "learning_rate": 0.00029768926203399874,
-      "loss": 0.7413,
+      "grad_norm": 0.3872693181037903,
+      "learning_rate": 4.961487700566646e-05,
+      "loss": 0.7088,
       "step": 50
     },
     {
       "epoch": 0.3436426116838488,
-      "eval_loss": 0.05391089990735054,
-      "eval_runtime": 12.6573,
-      "eval_samples_per_second": 91.726,
-      "eval_steps_per_second": 11.535,
+      "eval_loss": 0.2955036759376526,
+      "eval_runtime": 94.2292,
+      "eval_samples_per_second": 12.321,
+      "eval_steps_per_second": 1.549,
       "step": 50
     },
     {
       "epoch": 0.6872852233676976,
-      "grad_norm": 0.05974134802818298,
-      "learning_rate": 0.00028842377176109237,
-      "loss": 0.1088,
+      "grad_norm": 0.3463197946548462,
+      "learning_rate": 4.8070628626848735e-05,
+      "loss": 0.2901,
       "step": 100
     },
     {
       "epoch": 0.6872852233676976,
-      "eval_loss": 0.014580469578504562,
-      "eval_runtime": 12.6251,
-      "eval_samples_per_second": 91.96,
-      "eval_steps_per_second": 11.564,
+      "eval_loss": 0.2862032651901245,
+      "eval_runtime": 92.6907,
+      "eval_samples_per_second": 12.526,
+      "eval_steps_per_second": 1.575,
       "step": 100
     }
   ],
@@ -56,7 +56,7 @@
       "attributes": {}
     }
   },
-  "total_flos": 2.071854614170829e+16,
+  "total_flos": 2.729422030307328e+16,
   "train_batch_size": 16,
   "trial_name": null,
   "trial_params": null

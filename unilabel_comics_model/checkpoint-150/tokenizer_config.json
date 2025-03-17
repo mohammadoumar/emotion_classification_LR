@@ -2056,6 +2056,6 @@
   "extra_special_tokens": {},
   "model_max_length": 1000000000000000019884624838656,
   "pad_token": "<|finetune_right_pad_id|>",
-  "tokenizer_class": "PreTrainedTokenizerFast",
+  "tokenizer_class": "PreTrainedTokenizer",
   "unk_token": null
 }
